@@ -8,16 +8,16 @@ import { ThereIsNoStoreRegisteredWithThisUserIdError } from "../../service/error
 
 export async function GetStoreByUserIdController(request: FastifyRequest, reply: FastifyReply) {
     const GetStoreByUserIdControllerParamsSchema = z.object({
-        userId: z.string(),
+        user_id: z.string(),
     })
 
     try {
-        const { userId } = GetStoreByUserIdControllerParamsSchema.parse(request.params);
+        const { user_id } = GetStoreByUserIdControllerParamsSchema.parse(request.params);
 
         const storeRepository = new StoreRepositoryPrisma();
         const getStoreByUserIdService = new GetStoreByUserIdService(storeRepository);
 
-        const {store} = await getStoreByUserIdService.execute({userId});
+        const {store} = await getStoreByUserIdService.execute({userId:user_id});
 
         return reply.status(200).send(store)
     }

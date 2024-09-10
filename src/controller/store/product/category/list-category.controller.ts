@@ -15,6 +15,7 @@ export async function ListCategoryController(request:FastifyRequest,reply:Fastif
         console.log(categories)
         return reply.status(200).send(categories);
     }catch(error){
-
+        console.log("Internal Server Error ListCategoryController: " +error)
+        return reply.status(500).send({message:"Internal Server Error!"});
     }
 }

@@ -10,27 +10,27 @@ export async function RegisterProductController(request: FastifyRequest, reply: 
 
     const RegisterProductControllerBodySchema = z.object({
         title: z.string(),
-        imageUrl: z.string().url(),
+        image_url: z.string().url(),
         description: z.string(),
-        priceInCents: z.number().int(),
+        price_in_cents: z.number().int(),
         stock: z.number().int().min(0),
-        categoryId: z.string(),
-        storeId: z.string()
+        category_id: z.string(),
+        store_id: z.string()
     })
 
     try {
-        const { title, imageUrl, description, priceInCents, stock, categoryId, storeId } = RegisterProductControllerBodySchema.parse(request.body)
+        const { title, image_url, description, price_in_cents, stock, category_id, store_id } = RegisterProductControllerBodySchema.parse(request.body)
 
         const productRepository = new ProductRepositoryPrisma();
         const registerProductService = new RegisterProductService(productRepository);
         const { productRegister } = await registerProductService.execute({
             title,
-            imageUrl,
+            imageUrl:image_url,
             description,
-            priceInCents,
+            priceInCents:price_in_cents,
             stock,
-            categoryId,
-            storeId
+            categoryId:category_id,
+            storeId:store_id
         })
 
         return reply.status(201).send(productRegister);
@@ -41,5 +41,7 @@ export async function RegisterProductController(request: FastifyRequest, reply: 
         if (error instanceof ErrorRegisteringProductError){
             return reply.status(500).send({message:"Internal Server Error!"+error.message})
         }
+        console.log("Internal Server Error RegisterProductController: "+error)
+        return reply.status(500).send({message:"Internal Server Error!"});
     }
 }

@@ -13,48 +13,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model Product {
-  id String @id @default(cuid())
- title String
-  imageUrl String
-  description String
-  priceInCents BigInt
-  stock Int
+  id           String @id @default(cuid())
+  title        String
+  slug         String
+  imageUrl     String
+  description  String
+  priceInCents Int
+  stock        Int
 
   orders Order[]
 
-  Category Category @relation(fields: [categoryId],references: [id])
+  Category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
-  store Store @relation(fields: [storeId],references: [id])
+  store   Store  @relation(fields: [storeId], references: [id])
   storeId String
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id String @id @default(uuid())
-  title String
-  slug String
+  id       String    @id @default(uuid())
+  title    String
+  slug     String
   products Product[]
 }
-model Store{
-  id String @id @default(cuid())
-  title String
+
+model Store {
+  id          String  @id @default(cuid())
+  title       String
   description String?
-  cnpj String
+  cnpj        String
 
-
-  userId String
+  userId   String
   products Product[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
-  id String @id @default(uuid())
-  Products Product[]
-  fullPriceOrderInCents BigInt
+  id                    String    @id @default(uuid())
+  Products              Product[]
+  fullPriceOrderInCents Int
 
-  status String 
+  status     String
   customerId String
 }
-
