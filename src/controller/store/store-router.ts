@@ -6,6 +6,8 @@ import { ListCategoryController } from "./product/category/list-category.control
 import { RegisterCategoryController } from "./product/category/register-category.controller";
 import { ListProductByStoreIdController } from "./product/list-product-by-store-id.controller";
 import { GetProductByIdController } from "./product/get-product-by-id.controller";
+import { GetStoreByIdController } from "./get-store-by-id.controller";
+import { GetCategoryByIdController } from "./product/category/get-category-by-id.controller";
 
 export async function StoreRouter(app: FastifyInstance) {
 
@@ -13,6 +15,7 @@ export async function StoreRouter(app: FastifyInstance) {
     // Exemplo de URL: POST http://localhost:3333/api/store
     app.post("/", RegisterStoreController);
 
+    app.get("/:id", GetStoreByIdController);
     // Rota para obter uma loja pelo ID do usuário
     // Exemplo de URL: GET http://localhost:3333/api/store/userid/${user_id}
     app.get("/userid/:user_id", GetStoreByUserIdController);
@@ -37,4 +40,5 @@ export async function StoreRouter(app: FastifyInstance) {
     // Rota para registrar uma nova categoria de produto
     // Exemplo de URL: POST http://localhost:3333/api/store/product/category
     app.post("/product/category", RegisterCategoryController);
+    app.get("/product/category/:id", GetCategoryByIdController);
 }
