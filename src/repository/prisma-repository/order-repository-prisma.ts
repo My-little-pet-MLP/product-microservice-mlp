@@ -14,12 +14,7 @@ export class OrderRepositoryPrisma implements OrderRepository {
 
     async register(data: Prisma.OrderUncheckedCreateInput): Promise<Order> {
         const order = await prisma.order.create({
-            data: {
-                customerId: data.customerId,
-                fullPriceOrderInCents: 0,
-                status: "pending",
-                customerIdStripe: data.customerIdStripe
-            }
+            data,
         })
         return order;
     }
