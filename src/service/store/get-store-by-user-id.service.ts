@@ -7,7 +7,8 @@ interface GetStoreByUserIdServiceRequest {
     userId: string;
 }
 interface GetStoreByUserIdServiceReply {
-    store: Store
+    store: Store|null;
+    error: Error|null;
 }
 export class GetStoreByUserIdService {
     constructor(private storeRepository:StoreRepository) { }
@@ -17,10 +18,8 @@ export class GetStoreByUserIdService {
 
         if (!store) {
             console.log(ThereIsNoStoreRegisteredWithThisUserIdError)
-            throw new ThereIsNoStoreRegisteredWithThisUserIdError
+            return{store:null,error:new ThereIsNoStoreRegisteredWithThisUserIdError}
         }
-        return {
-            store
-        };
+        return {store:store,error:null};
     }
 }

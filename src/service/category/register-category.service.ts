@@ -1,5 +1,6 @@
 import { Category } from "@prisma/client";
-import { CategoryRepository } from "../../../../repository/category-repository";
+import { CategoryRepository } from "../../repository/category-repository";
+
 
 interface RegisterCategoryServiceRequest{
     title:string;

@@ -8,30 +8,34 @@ interface RegisterStoreServiceRequest{
     description:string;
     cnpj:string;
     userId:string;
+    imageUrl:string;
 }
 interface RegisterStoreServiceResponse{
-    storeRegister:Store
+    storeRegister:Store|null;
+    error:Error|null;
 }
 
 export class RegisterStoreService{
     constructor(private storeRepository:StoreRepository){}
 
-    async execute({title,description,cnpj,userId}:RegisterStoreServiceRequest):Promise<RegisterStoreServiceResponse>{
+    async execute({title,description,cnpj,userId,imageUrl}:RegisterStoreServiceRequest):Promise<RegisterStoreServiceResponse>{
 
 
         const userExists = await clerkClient.users.getUser(userId);
         if(!userExists){
             console.log(UserNotFoundError)
-            throw new UserNotFoundError
+            return {storeRegister:null,error:new UserNotFoundError}
         }
 
         const storeRegister = await this.storeRepository.register(
+                 
                 title,
                 description,
                 cnpj,
-                userId
+                userId,
+                imageUrl
         )
         
-        return {storeRegister}
+        return {storeRegister,error:null}
     }
 }

@@ -4,7 +4,7 @@ esse microserviço deve ser capaz de gerenciar toda a area que tem a ver com lis
 
 ## Requisitos funcionais 
 - [x] deve ser possivel buscar o produtos usando id;
-- [ ] deve ser possivel listar produtos usando categoryid;
+- [x] deve ser possivel listar produtos usando categoryid;
 - [x] deve ser possivel listar produtos usando storeid;
 - [x] deve ser possivel registrar um produto;
 

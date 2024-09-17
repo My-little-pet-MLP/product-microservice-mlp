@@ -1,6 +1,7 @@
 import fastify from "fastify";
-import { StoreRouter } from "./controller/store/store-router";
+
 import cors from '@fastify/cors'
+
 
 
 export const app = fastify({
@@ -11,4 +12,3 @@ app.register(cors, {
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS','PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
-app.register(StoreRouter ,{ prefix: '/api/store' })

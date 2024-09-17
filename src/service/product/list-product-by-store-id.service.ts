@@ -1,5 +1,6 @@
 import { Product } from "@prisma/client";
-import { ProductRepostory } from "../../../repository/product-repository";
+import { ProductRepostory } from "../../repository/product-repository";
+
 
 interface ListProductByStoreIdServiceRequest{
     storeId:string;

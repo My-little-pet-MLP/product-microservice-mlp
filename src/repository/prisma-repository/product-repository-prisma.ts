@@ -3,6 +3,18 @@ import { ProductRepostory } from "../product-repository";
 import { prisma } from "../../lib/prisma";
 
 export class ProductRepositoryPrisma implements ProductRepostory {
+    async listProductByCategoryId(categoryId: string, page: number, size: number): Promise<Product[]> {
+       const skip = (page -1) * size;
+
+       const products = await prisma.product.findMany({
+        where: {
+            categoryId,
+        },
+        skip,
+        take: size
+       })
+       return products;
+    }
     async getById(id: string): Promise<Product | null> {
        const product =  await prisma.product.findFirst({
         where:{
@@ -11,6 +23,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
        })
        return product;
     }
+
     async listProductsByStoreId(storeId: string, page: number, size: number): Promise<Product[]> {
         const skip = (page - 1) * size; // Calcula quantos itens devem ser ignorados
 
@@ -24,6 +37,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
 
         return products;
     }
+
     async register(data: Prisma.ProductUncheckedCreateInput): Promise<Product | null> {
         const product = await prisma.product.create({
             data
@@ -31,5 +45,5 @@ export class ProductRepositoryPrisma implements ProductRepostory {
 
         return product;
     }
-
+    
 }
