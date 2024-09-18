@@ -17,10 +17,15 @@ app.register(cors, {
     allowedHeaders: ['Content-Type', 'Authorization'],
 })
 
+app.get("/", async function helloWorld(req, res) {
+    return res.status(200).send("Hello World");
+}
+
+)
 app.register(StoreRouter, { prefix: "/store" })
 
-app.register(ProductRouter,{prefix:"/product"})
+app.register(ProductRouter, { prefix: "/product" })
 
-app.register(CategoryRouter,{prefix:"/category"})
+app.register(CategoryRouter, { prefix: "/category" })
 
-app.register(OrderRouter,{prefix:"/orders"})
+app.register(OrderRouter, { prefix: "/orders" })
