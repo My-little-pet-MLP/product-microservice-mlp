@@ -7,19 +7,19 @@ interface GetStoreByUserIdServiceRequest {
     userId: string;
 }
 interface GetStoreByUserIdServiceReply {
-    store: Store|null;
-    error: Error|null;
+    store: Store | null;
+    error: Error | null;
 }
 export class GetStoreByUserIdService {
-    constructor(private storeRepository:StoreRepository) { }
+    constructor(private storeRepository: StoreRepository) { }
 
     async execute({ userId }: GetStoreByUserIdServiceRequest): Promise<GetStoreByUserIdServiceReply> {
         const store = await this.storeRepository.findStoreByUserId(userId)
 
         if (!store) {
             console.log(ThereIsNoStoreRegisteredWithThisUserIdError)
-            return{store:null,error:new ThereIsNoStoreRegisteredWithThisUserIdError}
+            return { store: null, error: new ThereIsNoStoreRegisteredWithThisUserIdError }
         }
-        return {store:store,error:null};
+        return { store: store, error: null };
     }
 }
