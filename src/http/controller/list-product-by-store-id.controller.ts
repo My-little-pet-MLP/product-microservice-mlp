@@ -8,7 +8,7 @@ import { StoreNotFoundError } from "../../service/error/store-not-found-error";
 export async function ListProductByStoreIdController(req: FastifyRequest, res: FastifyReply) {
     const ParamsSchema = z.object({
         store_id: z.string(),
-        page: z.coerce.number.().int(),
+        page: z.coerce.number().int(),
         size: z.coerce.number().int(),
     })
     const { store_id, page, size } = ParamsSchema.parse(req.query)

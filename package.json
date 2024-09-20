@@ -14,11 +14,11 @@
   "devDependencies": {
     "@types/node": "22.5.4",
     "prisma": "5.19.1",
-    "tsup": "8.2.4",
     "tsx": "4.19.0",
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "tsup": "8.2.4",
     "@clerk/backend": "1.9.2",
     "@fastify/cors": "9.0.1",
     "@prisma/client": "5.19.1",
