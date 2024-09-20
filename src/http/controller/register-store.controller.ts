@@ -19,7 +19,7 @@ export async function RegisterStoreController(req: FastifyRequest, res: FastifyR
         user_id: z.string(),
         image_url: z.string().url(),
     })
-
+    
     const { title, description, cnpj, user_id, image_url } = bodySchema.parse(req.body)
 
     const storeRepository = new StoreRepositoryPrisma();
