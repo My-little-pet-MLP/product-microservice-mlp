@@ -1,6 +1,8 @@
 import { Order, Product } from "@prisma/client";
 import { OrderRepository } from "../../repository/order-repository";
 import { ProductRepostory } from "../../repository/product-repository";
+import { InvalidStatusError } from "../error/invalid-status-error";
+import { ProductNotFoundError } from "../error/product-not-found-error";
 
 interface UpdateOrderServiceRequest {
     id: string;
@@ -41,7 +43,7 @@ export class UpdateOrderService {
     }: UpdateOrderServiceRequest): Promise<UpdateOrderServiceResponse> {
         // Verificar se o status está dentro dos valores permitidos
         if (!Object.values($Enums.OrderStatus).includes(status as $Enums.OrderStatus)) {
-            return { order: null, error: new Error("Invalid status") };
+            return { order: null, error: new InvalidStatusError };
         }
 
         // Buscar os produtos pelos IDs fornecidos e verificar se existem
@@ -51,7 +53,7 @@ export class UpdateOrderService {
         for (const productId of productsid) {
             const product = await this.productRepository.getById(productId);
             if (!product) {
-                return { order: null, error: new Error(`Product with ID ${productId} not found`) };
+                return { order: null, error: new ProductNotFoundError };
             }
             productList.push(product);
             fullPriceOrderInCents += product.priceInCents; // Somar o preço de cada produto
