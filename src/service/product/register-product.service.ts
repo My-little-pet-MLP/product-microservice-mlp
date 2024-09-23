@@ -5,6 +5,7 @@ import { StoreNotFoundError } from "../error/store-not-found-error";
 import { CategoryRepository } from "../../repository/category-repository";
 import { UnRegisterCategoryError } from "../error/unregister-category-error";
 import { ErrorRegisteringProductError } from "../error/error-registering-product-error";
+import { generateSlug } from "../../utils/genereate-slug";
 
 
 interface RegisterProductServiceRequest {
@@ -21,17 +22,7 @@ interface RegisterProductServiceResponse {
     error: Error | null;
 }
 
-function generateSlug(title: string): string {
-    return title
-        .toLowerCase() // converte para minúsculas
-        .normalize("NFD") // decompõe caracteres acentuados
-        .replace(/[\u0300-\u036f]/g, "") // remove acentos
-        .replace(/\s+/g, '-') // substitui espaços por hífens
-        .replace(/[^\w-]+/g, '') // remove caracteres especiais
-        .replace(/--+/g, '-') // substitui múltiplos hífens por um único hífen
-        .replace(/^-+/, '') // remove hífen do início
-        .replace(/-+$/, ''); // remove hífen do final
-}
+
 export class RegisterProductService {
     constructor(private productRepository: ProductRepostory, private storeRepository: StoreRepository, private categoryRepository: CategoryRepository) { }
 

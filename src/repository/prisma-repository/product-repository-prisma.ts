@@ -3,25 +3,43 @@ import { ProductRepostory } from "../product-repository";
 import { prisma } from "../../lib/prisma";
 
 export class ProductRepositoryPrisma implements ProductRepostory {
+    async update(id: string, data: {
+        id: string;
+        title: string;
+        slug: string;
+        imageUrl: string;
+        description: string;
+        priceInCents: number;
+        stock: number;
+        categoryId: string;
+    }): Promise<Product> {
+        const product = await prisma.product.update({
+            where: {
+                id,
+            },
+            data,
+        })
+        return product
+    }
     async listProductByCategoryId(categoryId: string, page: number, size: number): Promise<Product[]> {
-       const skip = (page -1) * size;
+        const skip = (page - 1) * size;
 
-       const products = await prisma.product.findMany({
-        where: {
-            categoryId,
-        },
-        skip,
-        take: size
-       })
-       return products;
+        const products = await prisma.product.findMany({
+            where: {
+                categoryId,
+            },
+            skip,
+            take: size
+        })
+        return products;
     }
     async getById(id: string): Promise<Product | null> {
-       const product =  await prisma.product.findFirst({
-        where:{
-            id,
-        }
-       })
-       return product;
+        const product = await prisma.product.findFirst({
+            where: {
+                id,
+            }
+        })
+        return product;
     }
 
     async listProductsByStoreId(storeId: string, page: number, size: number): Promise<Product[]> {
@@ -45,5 +63,5 @@ export class ProductRepositoryPrisma implements ProductRepostory {
 
         return product;
     }
-    
+
 }

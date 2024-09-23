@@ -21,9 +21,7 @@ model Product {
   description  String
   priceInCents Int
   stock        Int
-
-  orders Order[]
-
+  
   Category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
@@ -33,6 +31,8 @@ model Product {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  ProductInOrders ProductInOrders[]
 }
 
 model Category {
@@ -67,7 +67,19 @@ model Order {
   status                OrderStatus
   customerIdStripe      String
   customerId            String
-  Products              Product[]
+
+  productInOrders ProductInOrders[]
+}
+
+model ProductInOrders {
+  id String @id @default(cuid())
+
+  product Product @relation(fields: [productId],references: [id])
+  productId String
+  quantity Int
+  
+  orders Order @relation(fields: [orderId],references: [id])
+  orderId String
 }
 
 enum OrderStatus {

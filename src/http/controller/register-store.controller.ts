@@ -10,14 +10,15 @@ interface StoreResponse {
     description: string;
     cnpj: string;
     createdAt: Date;
+    image_url: string;
 }
 export async function RegisterStoreController(req: FastifyRequest, res: FastifyReply) {
     const bodySchema = z.object({
         title: z.string(),
         description: z.string(),
         cnpj: z.string(),
-        user_id: z.string(),
         image_url: z.string().url(),
+        user_id: z.string(),
     })
     
     const { title, description, cnpj, user_id, image_url } = bodySchema.parse(req.body)
@@ -38,6 +39,7 @@ export async function RegisterStoreController(req: FastifyRequest, res: FastifyR
             description: storeRegister.description,
             cnpj: storeRegister.cnpj,
             createdAt: storeRegister.createdAt,
+            image_url: storeRegister.imageUrl
         };
         return res.status(200).send(store);
     }
