@@ -8,8 +8,8 @@ import { CategoryNotFoundError } from "../../service/error/category-not-found-er
 export async function ListProductByCategoryController(req: FastifyRequest, res: FastifyReply) {
     const ParamsSchema = z.object({
         category_id: z.string(),
-        page: z.cource.number().int(),
-        size: z.cource.number().int(),
+        page: z.coerce.number().int(),
+        size: z.coerce.number().int(),
     })
     const { category_id, page, size } = ParamsSchema.parse(req.query)
 
