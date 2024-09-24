@@ -24,41 +24,8 @@ export class OrderRepositoryPrisma implements OrderRepository {
             where: {
                 id,
             },
-            data: {
-                fullPriceOrderInCents: data.fullPriceOrderInCents,
-                status: data.status,
-                Products: data.Products
-            }
+            data
         })
         return order;
     }
-
-    async listByProductId(productId: string, size: number, page: number): Promise<Order[]> {
-        const skip = (page - 1) * size;
-        const orders = await prisma.order.findMany({
-            where: {
-                Products: {
-                    some: {
-                        id: productId
-                    }
-                }
-            },
-            skip: skip,
-            take: size,
-        });
-        return orders;
-    }
-
-    async listByCustomerId(customerId: string, size: number, page: number): Promise<Order[]> {
-        const skip = (page - 1) * size;
-        const orders = await prisma.order.findMany({
-            where: {
-                customerId,
-            },
-            skip: skip,
-            take: size,
-        })
-        return orders;
-    }
-
 }
