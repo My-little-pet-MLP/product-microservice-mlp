@@ -3,6 +3,13 @@ import { ProductRepostory } from "../product-repository";
 import { prisma } from "../../lib/prisma";
 
 export class ProductRepositoryPrisma implements ProductRepostory {
+    async countProductsByStoreId(storeId: string): Promise<number> {
+        return await prisma.product.count({
+            where: {
+                storeId: storeId
+            }
+        });
+    }
     async update(id: string, data: {
         id: string;
         title: string;
@@ -20,6 +27,13 @@ export class ProductRepositoryPrisma implements ProductRepostory {
             data,
         })
         return product
+    }
+    async countProductsByCategoryId(categoryId: string): Promise<number> {
+        return await prisma.product.count({
+            where: {
+                categoryId: categoryId,
+            },
+        });
     }
     async listProductByCategoryId(categoryId: string, page: number, size: number): Promise<Product[]> {
         const skip = (page - 1) * size;

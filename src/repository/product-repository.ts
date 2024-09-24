@@ -12,4 +12,6 @@ export interface ProductRepostory {
         priceInCents: number;
         stock: number;
         categoryId: string;}): Promise<Product>
+    countProductsByStoreId(storeId: string):Promise<number>
+    countProductsByCategoryId(categoryId:string):Promise<number>
 }
