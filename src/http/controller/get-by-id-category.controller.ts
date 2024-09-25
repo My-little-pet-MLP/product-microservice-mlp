@@ -21,5 +21,5 @@ export async function GetByIdCategoryController(req: FastifyRequest, res: Fastif
         }
         return res.status(500).send({ message: "Internal Server Error" });
     }
-    return res.send(200).send(category)
+    return res.status(200).send(category)
 }
