@@ -68,6 +68,8 @@ model Order {
   customerIdStripe      String
   customerId            String
 
+ created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
   productInOrders ProductInOrders[]
 }
 
@@ -80,6 +82,8 @@ model ProductInOrders {
   
   orders Order @relation(fields: [orderId],references: [id])
   orderId String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
 }
 
 enum OrderStatus {
