@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { ProductRepositoryPrisma } from "../../repository/prisma-repository/product-repository-prisma";
-import { RegisterProductService } from "../../service/product/register-product.service";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { CategoryRepositoryPrisma } from "../../repository/prisma-repository/category-repository-prisma";
-import { StoreNotFoundError } from "../../service/error/store-not-found-error";
-import { UnRegisterCategoryError } from "../../service/error/unregister-category-error";
-import { ErrorRegisteringProductError } from "../../service/error/error-registering-product-error";
+import { ProductRepositoryPrisma } from "../../../repository/prisma-repository/product-repository-prisma";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { CategoryRepositoryPrisma } from "../../../repository/prisma-repository/category-repository-prisma";
+import { RegisterProductService } from "../../../service/product/register-product.service";
+import { StoreNotFoundError } from "../../../service/error/store-not-found-error";
+import { UnRegisterCategoryError } from "../../../service/error/unregister-category-error";
+import { ErrorRegisteringProductError } from "../../../service/error/error-registering-product-error";
 
 export async function RegisterProductController(req: FastifyRequest, res: FastifyReply) {
     const bodySchema = z.object({

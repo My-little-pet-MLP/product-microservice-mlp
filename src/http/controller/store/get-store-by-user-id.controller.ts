@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { GetStoreByUserIdService } from "../../service/store/get-store-by-user-id.service";
-import { ThereIsNoStoreRegisteredWithThisUserIdError } from "../../service/error/there-is-no-store-registered-with-this-user-id-error";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { GetStoreByUserIdService } from "../../../service/store/get-store-by-user-id.service";
+import { ThereIsNoStoreRegisteredWithThisUserIdError } from "../../../service/error/there-is-no-store-registered-with-this-user-id-error";
 
 
 export async function GetStoreByUserIdController(req: FastifyRequest, res: FastifyReply) {

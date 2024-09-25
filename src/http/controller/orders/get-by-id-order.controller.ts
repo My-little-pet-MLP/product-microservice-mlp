@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { OrderRepositoryPrisma } from "../../repository/prisma-repository/order-repository-prisma";
-import { GetByIdOrderService } from "../../service/order/get-by-id-order.service";
-import { OrderNotFoundError } from "../../service/error/order-not-found-error";
+import { OrderRepositoryPrisma } from "../../../repository/prisma-repository/order-repository-prisma";
+import { GetByIdOrderService } from "../../../service/order/get-by-id-order.service";
+import { OrderNotFoundError } from "../../../service/error/order-not-found-error";
 
 export async function GetByIdOrderController(req: FastifyRequest, res: FastifyReply) {
     const paramsSchema = z.object({

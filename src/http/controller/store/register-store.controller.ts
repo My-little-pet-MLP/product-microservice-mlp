@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { RegisterStoreService } from "../../service/store/register-store.service";
-import { UserNotFoundError } from "../../service/error/user-not-found-error";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { RegisterStoreService } from "../../../service/store/register-store.service";
+import { UserNotFoundError } from "../../../service/error/user-not-found-error";
 
 interface StoreResponse {
     id: string;

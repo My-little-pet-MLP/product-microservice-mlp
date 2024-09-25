@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { UpdateStoreService } from "../../service/store/update-store.service";
-import { StoreNotFoundError } from "../../service/error/store-not-found-error";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { UpdateStoreService } from "../../../service/store/update-store.service";
+import { StoreNotFoundError } from "../../../service/error/store-not-found-error";
+
 
 export async function UpdateStoreController(req:FastifyRequest,res:FastifyReply) {
     const updateStoreBodySchema = z.object({

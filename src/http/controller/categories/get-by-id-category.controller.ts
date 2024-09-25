@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { CategoryRepositoryPrisma } from "../../repository/prisma-repository/category-repository-prisma";
-import { GetByIdCategoryService } from "../../service/category/get-by-id-category.service";
-import { CategoryNotFoundError } from "../../service/error/category-not-found-error";
+import { CategoryRepositoryPrisma } from "../../../repository/prisma-repository/category-repository-prisma";
+import { CategoryNotFoundError } from "../../../service/error/category-not-found-error";
+import { GetByIdCategoryService } from "../../../service/category/get-by-id-category.service";
 
 export async function GetByIdCategoryController(req: FastifyRequest, res: FastifyReply) {
     const ParamsSchema = z.object({
@@ -21,5 +21,5 @@ export async function GetByIdCategoryController(req: FastifyRequest, res: Fastif
         }
         return res.status(500).send({ message: "Internal Server Error" });
     }
-    return res.send(200).send(category)
+    return res.status(200).send(category)
 }

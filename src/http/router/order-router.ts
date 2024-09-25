@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 
-import { GetByIdOrderController } from "../controller/get-by-id-order.controller";
+import { GetByIdOrderController } from "../controller/orders/get-by-id-order.controller";
 
 
 

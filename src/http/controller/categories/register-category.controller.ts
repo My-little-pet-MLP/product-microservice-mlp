@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CategoryRepositoryPrisma } from "../../repository/prisma-repository/category-repository-prisma";
-import { RegisterCategoryService } from "../../service/category/register-category.service";
 import { z } from "zod";
+import { CategoryRepositoryPrisma } from "../../../repository/prisma-repository/category-repository-prisma";
+import { RegisterCategoryService } from "../../../service/category/register-category.service";
 
 export async function RegisterCategoryController(req:FastifyRequest,res:FastifyReply) {
     const bodySchema = z.object({
