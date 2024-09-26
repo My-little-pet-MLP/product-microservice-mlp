@@ -8,7 +8,7 @@ export async function DeleteProductByIdController(req: FastifyRequest, res: Fast
     const DeleteProductByIdParamsSchema = z.object({
         id: z.string().min(1, "Id is required!"),
     })
-    const { id } = DeleteProductByIdParamsSchema.parse(req.body)
+    const { id } = DeleteProductByIdParamsSchema.parse(req.params)
 
     const productRepository = new ProductRepositoryPrisma();
     const deleteProductByIdService = new DeleteProductService(productRepository);
