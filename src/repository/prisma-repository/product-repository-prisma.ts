@@ -3,6 +3,16 @@ import { ProductRepostory } from "../product-repository";
 import { prisma } from "../../lib/prisma";
 
 export class ProductRepositoryPrisma implements ProductRepostory {
+    async delete(id: string): Promise<void> {
+        await prisma.product.update({
+            where: {
+                id
+            },
+            data: {
+                isActive: false,
+            }
+        });
+    }
     async countProductsByStoreId(storeId: string): Promise<number> {
         return await prisma.product.count({
             where: {
@@ -58,7 +68,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
 
     async listProductsByStoreId(storeId: string, page: number, size: number): Promise<Product[]> {
         const skip = (page - 1) * size; // Calcula quantos itens devem ser ignorados
-    
+
         const products = await prisma.product.findMany({
             where: {
                 storeId: storeId, // Filtra os produtos pelo storeId
@@ -69,7 +79,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
                 isActive: 'desc', // Ordena pelos produtos com isActive: false no final
             },
         });
-    
+
         return products;
     }
 

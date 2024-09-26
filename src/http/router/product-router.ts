@@ -4,6 +4,7 @@ import { ListProductByCategoryController } from "../controller/product/list-prod
 import { ListProductByStoreIdController } from "../controller/product/list-product-by-store-id.controller";
 import { RegisterProductController } from "../controller/product/register-product.controller";
 import { UpdateProductController } from "../controller/product/update-product.controller";
+import { DeleteProductByIdController } from "../controller/product/delete-product-by-id.controller";
 
 
 export async function ProductRouter(app:FastifyInstance) {
@@ -15,4 +16,6 @@ export async function ProductRouter(app:FastifyInstance) {
    app.post("/",RegisterProductController)
 
    app.put("/",UpdateProductController)
+
+   app.delete("/:id",DeleteProductByIdController)
 }

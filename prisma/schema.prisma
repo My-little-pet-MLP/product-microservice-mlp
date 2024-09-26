@@ -21,7 +21,7 @@ model Product {
   description  String
   priceInCents Int
   stock        Int
-  
+
   Category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
@@ -66,22 +66,22 @@ model Order {
   store                 Store       @relation(fields: [storeId], references: [id])
   status                OrderStatus
   customerIdStripe      String
-  customerId            String
-
- created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
+  customerId      String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt()
   productInOrders ProductInOrders[]
+
 }
 
 model ProductInOrders {
   id String @id @default(cuid())
 
-  product Product @relation(fields: [productId],references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId String
-  quantity Int
-  
-  orders Order @relation(fields: [orderId],references: [id])
-  orderId String
+  quantity  Int
+
+  orders     Order    @relation(fields: [orderId], references: [id])
+  orderId    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 }

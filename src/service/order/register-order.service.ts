@@ -17,19 +17,16 @@ export class RegisterOrderService {
     constructor(private orderRepository: OrderRepository, private storeRepository: StoreRepository) { }
 
     async execute({ storeId, customerId, customerIdStripe }: RegisterOrderServiceRequest): Promise<RegisterOrderServiceResponse> {
-
         const storeExists = await this.storeRepository.findById(storeId);
         if (!storeExists) {
             return { order: null, error: new StoreNotFoundError }
         }
-
         const orderRegister = await this.orderRepository.register({
             storeId,
             status: "pending",
             customerId,
             customerIdStripe,
             fullPriceOrderInCents: 0,
-
         })
         return { order: orderRegister, error: null };
     }
