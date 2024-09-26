@@ -12,6 +12,7 @@ export interface ProductRepostory {
         priceInCents: number;
         stock: number;
         categoryId: string;}): Promise<Product>
+        delete(id:string):Promise<void>
     countProductsByStoreId(storeId: string):Promise<number>
     countProductsByCategoryId(categoryId:string):Promise<number>
 }
