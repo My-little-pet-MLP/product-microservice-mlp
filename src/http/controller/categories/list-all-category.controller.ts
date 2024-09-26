@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CategoryRepositoryPrisma } from "../../repository/prisma-repository/category-repository-prisma";
-import { ListAllCategoryService } from "../../service/category/list-all-category.service";
+import { CategoryRepositoryPrisma } from "../../../repository/prisma-repository/category-repository-prisma";
+import { ListAllCategoryService } from "../../../service/category/list-all-category.service";
 
 export async function  ListAllCategoryController(req:FastifyRequest,res:FastifyReply) {
     

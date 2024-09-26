@@ -1,9 +1,9 @@
-import { Order, Prisma } from "@prisma/client";
+import { Order, Prisma, ProductInOrders } from "@prisma/client";
 
 export interface ProductInOrderRepository{
-    listAllByOrder(orderId:string):Promise<Order[]|null>
-    findById(id:string):Promise<Order|null>
-    register(data:Prisma.ProductInOrdersUncheckedCreateInput):Promise<Order|null>
-    update(data:Prisma.ProductInOrdersUncheckedUpdateInput):Promise<Order|null>
+    listAllByOrder(orderId:string):Promise<ProductInOrders[]|null>
+    findById(id:string):Promise<ProductInOrders|null>
+    register(data:Prisma.ProductInOrdersUncheckedCreateInput):Promise<ProductInOrders|null>
+    update(id:string,data:Prisma.ProductInOrdersUncheckedUpdateInput):Promise<ProductInOrders|null>
     delete(id:string):Promise<void>
 }

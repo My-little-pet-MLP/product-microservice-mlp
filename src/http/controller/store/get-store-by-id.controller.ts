@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { GetStoreByIdService } from "../../service/store/get-store-by-id.service";
-import { StoreNotFoundError } from "../../service/error/store-not-found-error";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { GetStoreByIdService } from "../../../service/store/get-store-by-id.service";
+import { StoreNotFoundError } from "../../../service/error/store-not-found-error";
+
 
 export async function GetStoreByIdController(req: FastifyRequest, res: FastifyReply) {
     const getStoreByIdParamsSchema = z.object({

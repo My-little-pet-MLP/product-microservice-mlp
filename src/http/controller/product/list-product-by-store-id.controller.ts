@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { ProductRepositoryPrisma } from "../../repository/prisma-repository/product-repository-prisma";
-import { ListProductByStoreIdService } from "../../service/product/list-product-by-store-id.service";
-import { StoreRepositoryPrisma } from "../../repository/prisma-repository/store-repository-prisma";
-import { StoreNotFoundError } from "../../service/error/store-not-found-error";
+import { ProductRepositoryPrisma } from "../../../repository/prisma-repository/product-repository-prisma";
+import { StoreRepositoryPrisma } from "../../../repository/prisma-repository/store-repository-prisma";
+import { ListProductByStoreIdService } from "../../../service/product/list-product-by-store-id.service";
+import { StoreNotFoundError } from "../../../service/error/store-not-found-error";
 
 export async function ListProductByStoreIdController(req: FastifyRequest, res: FastifyReply) {
     // Validação dos parâmetros de consulta com Zod
