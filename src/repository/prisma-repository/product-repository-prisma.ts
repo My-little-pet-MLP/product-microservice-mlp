@@ -51,6 +51,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         const products = await prisma.product.findMany({
             where: {
                 categoryId,
+                isActive:true
             },
             skip,
             take: size
@@ -72,6 +73,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         const products = await prisma.product.findMany({
             where: {
                 storeId: storeId, // Filtra os produtos pelo storeId
+                isActive:true
             },
             skip: skip, // Ignora os primeiros `skip` registros
             take: size, // Retorna apenas `size` registros
