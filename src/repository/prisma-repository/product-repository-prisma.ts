@@ -16,7 +16,8 @@ export class ProductRepositoryPrisma implements ProductRepostory {
     async countProductsByStoreId(storeId: string): Promise<number> {
         return await prisma.product.count({
             where: {
-                storeId: storeId
+                storeId: storeId,
+                isActive: true
             }
         });
     }
@@ -42,6 +43,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         return await prisma.product.count({
             where: {
                 categoryId: categoryId,
+                isActive:true
             },
         });
     }
