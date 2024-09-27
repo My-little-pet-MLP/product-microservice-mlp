@@ -10,7 +10,8 @@ const envSchema = z.object({
     CLERK_SECRET_KEY: z.string().min(1,"CLERK_SECRET_KEY is required!"),
     NODE_ENV: z.enum(["development", "production", "test"]).default("development") ,
     PORT: z.coerce.number().min(1,"PORT is required"),
-    STRIPE_KEY: z.string().min(1,"STRIPE_KEY is required")
+    STRIPE_KEY: z.string().min(1,"STRIPE_KEY is required"),
+    CLERK_SECRET_KEY_CUSTOMER: z.string().min(1,"CLERK_SECRET_KEY_CUSTOMER is required")
 });
 
 // Valida as variáveis de ambiente
