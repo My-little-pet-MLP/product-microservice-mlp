@@ -5,6 +5,7 @@ import { StoreRouter } from "./http/router/store-router";
 import { ProductRouter } from "./http/router/product-router";
 import { CategoryRouter } from "./http/router/category-router";
 import { OrderRouter } from "./http/router/order-router";
+import { ProductInOrdersRouter } from "./http/router/product-in-orders-router";
 
 
 
@@ -22,6 +23,8 @@ app.get("/", async function helloWorld(req, res) {
 }
 
 )
+
+app.register(ProductInOrdersRouter,{prefix:"/product-in-orders"})
 app.register(StoreRouter, { prefix: "/store" })
 
 app.register(ProductRouter, { prefix: "/product" })
