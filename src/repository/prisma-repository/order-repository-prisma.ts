@@ -3,15 +3,25 @@ import { OrderRepository } from "../order-repository";
 import { prisma } from "../../lib/prisma";
 
 export class OrderRepositoryPrisma implements OrderRepository {
-    async listAllByCustomerId(customerId: string): Promise<Order[] | null> {
+    async listAllByCustomerId(
+        customerId: string, 
+        page: number,
+        size: number
+    ): Promise<Order[] | null> {
+        const skip = (page - 1) * size; 
+        const take = size;  
+    
         const orders = await prisma.order.findMany({
-            where:{
+            where: {
                 customerId,
             },
-            orderBy:{
-                updated_at:"desc"
-            }
-        })
+            orderBy: {
+                updated_at: "desc",
+            },
+            skip,   
+            take,  
+        });
+    
         return orders;
     }
     async getById(id: string): Promise<Order | null> {
