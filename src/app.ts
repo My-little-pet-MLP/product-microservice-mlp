@@ -8,6 +8,7 @@ import { OrderRouter } from "./http/router/order-router";
 import { ProductInOrdersRouter } from "./http/router/product-in-orders-router";
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import { config } from "./env";
 
 export const app = fastify({ logger: true });
 
@@ -17,7 +18,8 @@ app.register(cors, {
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 });
-
+// Definir a URL do servidor dinamicamente
+const serverUrl = config.SERVER_URL || 'http://localhost:3000';
 // Registrar o Swagger para fornecer os esquemas
 app.register(swagger, {
   openapi: {
@@ -28,7 +30,7 @@ app.register(swagger, {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: serverUrl,
         description: 'Servidor local',
       }
     ],
