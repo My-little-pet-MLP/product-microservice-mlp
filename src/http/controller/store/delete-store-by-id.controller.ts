@@ -14,5 +14,6 @@ export async function DeleteStoreByIdController(req:FastifyRequest,res:FastifyRe
 
     const {} = await deleteStoreByIdService.execute({id})
 
-    return res.status(204)
+    return res.status(204).send();
+
 }
