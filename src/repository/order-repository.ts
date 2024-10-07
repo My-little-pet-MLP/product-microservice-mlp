@@ -7,5 +7,6 @@ export interface OrderRepository {
     register(data:Prisma.OrderUncheckedCreateInput):Promise<Order>
     
     update(id:string,data:Prisma.OrderUncheckedUpdateInput):Promise<Order|null>
-
+    countOrdersByStoreId(storeId: string): Promise<number>
+    countOrdersByCustomerId(customerId:string):Promise<number>
 }

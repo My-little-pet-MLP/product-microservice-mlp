@@ -4,15 +4,16 @@ export interface ProductRepostory {
     listProductsByStoreId(storeId: string, page: number, size: number): Promise<Product[]>
     getById(id: string): Promise<Product | null>
     listProductByCategoryId(categoryId: string, page: number, size: number): Promise<Product[]>
-    update(id: string, data:{
+    update(id: string, data: {
         title: string;
         slug: string;
         imageUrl: string;
         description: string;
         priceInCents: number;
         stock: number;
-        categoryId: string;}): Promise<Product>
-        delete(id:string):Promise<void>
-    countProductsByStoreId(storeId: string):Promise<number>
-    countProductsByCategoryId(categoryId:string):Promise<number>
+        categoryId: string;
+    }): Promise<Product>
+    delete(id: string): Promise<void>
+    countProductsByStoreId(storeId: string): Promise<number>
+    countProductsByCategoryId(categoryId: string): Promise<number>
 }

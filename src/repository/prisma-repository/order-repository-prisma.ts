@@ -3,6 +3,22 @@ import { OrderRepository } from "../order-repository";
 import { prisma } from "../../lib/prisma";
 
 export class OrderRepositoryPrisma implements OrderRepository {
+    async countOrdersByCustomerId(customerId: string): Promise<number> {
+        return await prisma.order.count({
+            where: {
+                customerId,
+              
+            }
+        });
+    }
+    async countOrdersByStoreId(storeId: string): Promise<number> {
+        return await prisma.order.count({
+            where: {
+                storeId: storeId,
+              
+            }
+        });
+    }
     async listAllByCustomerId(
         customerId: string, 
         page: number,
