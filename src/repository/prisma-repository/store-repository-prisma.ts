@@ -4,37 +4,38 @@ import { prisma } from "../../lib/prisma";
 
 export class StoreRepositoryPrisma implements StoreRepository {
     async delete(id: string): Promise<void> {
-       await prisma.store.update(
-       {
-        where:{
-            id,
-        },
-        data:{
-            isActive:false
-        }
-       }
-       )
+        const store = await prisma.store.update(
+            {
+                where: {
+                    id,
+                },
+                data: {
+                    isActive: false
+                }
+            }
+        )
+        return
     }
-    
+
     async findById(id: string): Promise<Store | null> {
-       const store = await prisma.store.findFirst({
-        where:{
-            id
-        }
-       })
-       return store;
+        const store = await prisma.store.findFirst({
+            where: {
+                id
+            }
+        })
+        return store;
     }
     async findStoreByUserId(userId: string): Promise<Store | null> {
         const store = await prisma.store.findFirst({
-            where:{
+            where: {
                 userId
             }
-           })
-           return store;
+        })
+        return store;
     }
-    async register(title:string,description:string,cnpj:string,userId:string,imageUrl:string): Promise<Store> {
+    async register(title: string, description: string, cnpj: string, userId: string, imageUrl: string): Promise<Store> {
         const storeRegister = await prisma.store.create({
-            data:{
+            data: {
                 title,
                 description,
                 cnpj,
@@ -45,19 +46,19 @@ export class StoreRepositoryPrisma implements StoreRepository {
         return storeRegister;
     }
 
-    async update(id: string, data:{cnpj:string,imageUrl:string,description:string,title:string}): Promise<Store | null> {
+    async update(id: string, data: { cnpj: string, imageUrl: string, description: string, title: string }): Promise<Store | null> {
         const storeUpdate = await prisma.store.update({
-            where:{
+            where: {
                 id
             },
-            data:{
-                title:data.title,
-                description:data.description,
-                imageUrl:data.imageUrl,
-                cnpj:data.cnpj,
+            data: {
+                title: data.title,
+                description: data.description,
+                imageUrl: data.imageUrl,
+                cnpj: data.cnpj,
             }
         })
         return storeUpdate;
     }
-    
+
 }
