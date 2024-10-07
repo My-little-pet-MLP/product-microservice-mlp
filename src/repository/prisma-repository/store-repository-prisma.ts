@@ -3,6 +3,18 @@ import { StoreRepository } from "../store-repository";
 import { prisma } from "../../lib/prisma";
 
 export class StoreRepositoryPrisma implements StoreRepository {
+    async delete(id: string): Promise<void> {
+       await prisma.store.update(
+       {
+        where:{
+            id,
+        },
+        data:{
+            isActive:false
+        }
+       }
+       )
+    }
     
     async findById(id: string): Promise<Store | null> {
        const store = await prisma.store.findFirst({
