@@ -4,6 +4,7 @@ import { GetStoreByUserIdController } from "../controller/store/get-store-by-use
 import { RegisterStoreController } from "../controller/store/register-store.controller";
 import { UpdateStoreController } from "../controller/store/update-store.controller";
 import { DeleteStoreByIdController } from "../controller/store/delete-store-by-id.controller";
+import { ReactivateStoreByIdController } from "../controller/store/reactivate-store-by-id.controller";
 
 export async function StoreRouter(app: FastifyInstance) {
     app.get("/:id", {
@@ -254,4 +255,44 @@ export async function StoreRouter(app: FastifyInstance) {
             }
         }
     }, DeleteStoreByIdController);
+    app.put("/reactivate/:id", {
+        schema: {
+            description: 'Reativar uma loja pelo ID',
+            tags: ['Loja'],
+            params: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string', description: 'ID da loja a ser reativada' }
+                },
+                required: ['id']
+            },
+            response: {
+                200: {
+                    description: 'Loja reativada com sucesso',
+                    type: 'object',
+                    properties: {
+                        id: { type: 'string', description: 'ID da loja' },
+                        imageUrl: { type: 'string', description: 'URL da imagem da loja' },
+                        title: { type: 'string', description: 'Nome da loja' },
+                        description: { type: 'string', description: 'Descrição da loja' },
+                        cnpj: { type: 'string', description: 'CNPJ da loja' },
+                        userId: { type: 'string', description: 'ID do usuário associado' },
+                        isActive: { type: 'boolean', description: 'Status da loja (ativa ou inativa)' },
+                        createdAt: { type: 'string', format: 'date-time', description: 'Data de criação da loja' },
+                        updatedAt: { type: 'string', format: 'date-time', description: 'Data de atualização da loja' }
+                    }
+                },
+                500: {
+                    description: 'Erro interno do servidor',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    },
+                    example: {
+                        message: 'Internal Server Error'
+                    }
+                }
+            }
+        }
+    }, ReactivateStoreByIdController)
 }
