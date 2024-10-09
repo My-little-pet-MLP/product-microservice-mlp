@@ -32,9 +32,13 @@ export class RegisterProductInOrdersService {
         if (!productExists) {
             return { productInOrders: null, error: new ProductNotFoundError };
         }
+        if (productExists.isActive == false) {
+            return { productInOrders: null, error: new ProductNotFoundError };
+        }
         if (quantity < 0) {
             return { productInOrders: null, error: new QuantityIsNegativeError };
         }
+
         const productInOrders = await this.productInOrdersRepository.register({ orderId, productId, quantity });
 
         return { productInOrders, error: null }

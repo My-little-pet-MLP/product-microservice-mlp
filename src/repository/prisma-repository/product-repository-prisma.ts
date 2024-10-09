@@ -3,6 +3,25 @@ import { ProductRepostory } from "../product-repository";
 import { prisma } from "../../lib/prisma";
 
 export class ProductRepositoryPrisma implements ProductRepostory {
+    async verifyIsActive(id: string): Promise<Product | null> {
+        return await prisma.product.findFirst({
+            where: {
+                id,
+                isActive: true
+            }
+        })
+    }
+    async updateStock(id: string, stock: number): Promise<Product | null> {
+        const product = await prisma.product.update({
+            where: {
+                id,
+            },
+            data: {
+                stock,
+            }
+        })
+        return product
+    }
     async delete(id: string): Promise<void> {
         await prisma.product.update({
             where: {
@@ -43,7 +62,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         return await prisma.product.count({
             where: {
                 categoryId: categoryId,
-                isActive:true
+                isActive: true
             },
         });
     }
@@ -53,7 +72,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         const products = await prisma.product.findMany({
             where: {
                 categoryId,
-                isActive:true
+                isActive: true
             },
             skip,
             take: size
@@ -75,7 +94,7 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         const products = await prisma.product.findMany({
             where: {
                 storeId: storeId, // Filtra os produtos pelo storeId
-                isActive:true
+                isActive: true
             },
             skip: skip, // Ignora os primeiros `skip` registros
             take: size, // Retorna apenas `size` registros
