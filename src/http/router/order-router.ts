@@ -32,7 +32,6 @@ export async function OrderRouter(app: FastifyInstance) {
                         fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                         storeId: { type: 'string', description: 'ID da loja' },
                         status: { type: 'string', description: 'Status do pedido' },
-                        customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
                         customerId: { type: 'string', description: 'ID do cliente' },
                         created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                         updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -42,7 +41,6 @@ export async function OrderRouter(app: FastifyInstance) {
                         fullPriceOrderInCents: 5000,
                         storeId: '67890',
                         status: 'PENDING',
-                        customerIdStripe: 'cus_ABC123',
                         customerId: 'cust_98765',
                         created_at: '2024-10-06T10:00:00Z',
                         updated_at: '2024-10-06T12:00:00Z'
@@ -98,7 +96,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                     fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                                     storeId: { type: 'string', description: 'ID da loja' },
                                     status: { type: 'string', description: 'Status do pedido' },
-                                    customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                                  
                                     customerId: { type: 'string', description: 'ID do cliente' },
                                     created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                     updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -115,7 +113,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: 5000,
                                 storeId: '67890',
                                 status: 'PENDING',
-                                customerIdStripe: 'cus_ABC123',
+                             
                                 customerId: 'cust_98765',
                                 created_at: '2024-10-06T10:00:00Z',
                                 updated_at: '2024-10-06T12:00:00Z'
@@ -125,7 +123,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: 12000,
                                 storeId: '54321',
                                 status: 'COMPLETED',
-                                customerIdStripe: 'cus_DEF456',
+                           
                                 customerId: 'cust_98765',
                                 created_at: '2024-10-07T10:00:00Z',
                                 updated_at: '2024-10-07T12:00:00Z'
@@ -167,8 +165,7 @@ export async function OrderRouter(app: FastifyInstance) {
                 type: 'object',
                 properties: {
                     store_id: { type: 'string', description: 'ID da loja' },
-                    customer_id: { type: 'string', description: 'ID do cliente' },
-                    customer_id_stripe: { type: 'string', description: 'ID do cliente no Stripe' }
+                    customer_id: { type: 'string', description: 'ID do cliente' }
                 },
                 required: ['store_id', 'customer_id', 'customer_id_stripe']
             },
@@ -181,7 +178,7 @@ export async function OrderRouter(app: FastifyInstance) {
                         fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                         storeId: { type: 'string', description: 'ID da loja' },
                         status: { type: 'string', description: 'Status do pedido' },
-                        customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                    
                         customerId: { type: 'string', description: 'ID do cliente' },
                         created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                         updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -191,7 +188,7 @@ export async function OrderRouter(app: FastifyInstance) {
                         fullPriceOrderInCents: 5000,
                         storeId: '67890',
                         status: 'PENDING',
-                        customerIdStripe: 'cus_ABC123',
+                    
                         customerId: 'cust_98765',
                         created_at: '2024-10-06T10:00:00Z',
                         updated_at: '2024-10-06T12:00:00Z'
@@ -259,7 +256,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                                 storeId: { type: 'string', description: 'ID da loja' },
                                 status: { type: 'string', description: 'Status do pedido' },
-                                customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                            
                                 customerId: { type: 'string', description: 'ID do cliente' },
                                 created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                 updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -272,7 +269,7 @@ export async function OrderRouter(app: FastifyInstance) {
                             fullPriceOrderInCents: 5000,
                             storeId: '67890',
                             status: 'shipped',
-                            customerIdStripe: 'cus_ABC123',
+                        
                             customerId: 'cust_98765',
                             created_at: '2024-10-06T10:00:00Z',
                             updated_at: '2024-10-07T12:00:00Z'
@@ -325,7 +322,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                                 storeId: { type: 'string', description: 'ID da loja' },
                                 status: { type: 'string', description: 'Status do pedido' },
-                                customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                            
                                 customerId: { type: 'string', description: 'ID do cliente' },
                                 created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                 updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -338,7 +335,7 @@ export async function OrderRouter(app: FastifyInstance) {
                             fullPriceOrderInCents: 10000,
                             storeId: '54321',
                             status: 'CONFIRMED',
-                            customerIdStripe: 'cus_ABC123',
+                         
                             customerId: 'cust_98765',
                             created_at: '2024-10-07T10:00:00Z',
                             updated_at: '2024-10-07T12:00:00Z'
@@ -406,7 +403,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                     fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                                     storeId: { type: 'string', description: 'ID da loja' },
                                     status: { type: 'string', description: 'Status do pedido' },
-                                    customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                                  
                                     customerId: { type: 'string', description: 'ID do cliente' },
                                     created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                     updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -423,7 +420,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: 10000,
                                 storeId: '54321',
                                 status: 'PENDING',
-                                customerIdStripe: 'cus_ABC123',
+                               
                                 customerId: 'cust_98765',
                                 created_at: '2024-10-07T10:00:00Z',
                                 updated_at: '2024-10-07T12:00:00Z'
@@ -433,7 +430,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: 20000,
                                 storeId: '54321',
                                 status: 'SHIPPED',
-                                customerIdStripe: 'cus_DEF456',
+                             
                                 customerId: 'cust_98765',
                                 created_at: '2024-10-07T10:30:00Z',
                                 updated_at: '2024-10-07T12:30:00Z'
@@ -491,7 +488,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
                                 storeId: { type: 'string', description: 'ID da loja' },
                                 status: { type: 'string', description: 'Status do pedido' },
-                                customerIdStripe: { type: 'string', description: 'ID do cliente no Stripe' },
+                             
                                 customerId: { type: 'string', description: 'ID do cliente' },
                                 created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                 updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
@@ -504,7 +501,7 @@ export async function OrderRouter(app: FastifyInstance) {
                             fullPriceOrderInCents: 10000,
                             storeId: '54321',
                             status: 'PENDING',
-                            customerIdStripe: 'cus_ABC123',
+                          
                             customerId: 'cust_98765',
                             created_at: '2024-10-07T10:00:00Z',
                             updated_at: '2024-10-07T12:00:00Z'

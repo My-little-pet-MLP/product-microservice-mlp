@@ -65,7 +65,6 @@ model Order {
   storeId               String
   store                 Store       @relation(fields: [storeId], references: [id])
   status                OrderStatus
-  customerIdStripe      String
   customerId      String
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt()
