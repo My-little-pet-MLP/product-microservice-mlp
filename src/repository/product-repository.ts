@@ -16,4 +16,7 @@ export interface ProductRepostory {
     delete(id: string): Promise<void>
     countProductsByStoreId(storeId: string): Promise<number>
     countProductsByCategoryId(categoryId: string): Promise<number>
+
+    updateStock(id:string,stock:number):Promise<Product|null>
+    verifyIsActive(id:string):Promise<Product|null>
 }
