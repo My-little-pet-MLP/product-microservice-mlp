@@ -6,7 +6,6 @@ import { StoreNotFoundError } from "../error/store-not-found-error";
 interface RegisterOrderServiceRequest {
     storeId: string
     customerId: string
-    customerIdStripe: string;
 }
 interface RegisterOrderServiceResponse {
     order: Order | null;
@@ -16,7 +15,7 @@ interface RegisterOrderServiceResponse {
 export class RegisterOrderService {
     constructor(private orderRepository: OrderRepository, private storeRepository: StoreRepository) { }
 
-    async execute({ storeId, customerId, customerIdStripe }: RegisterOrderServiceRequest): Promise<RegisterOrderServiceResponse> {
+    async execute({ storeId, customerId }: RegisterOrderServiceRequest): Promise<RegisterOrderServiceResponse> {
         const storeExists = await this.storeRepository.findById(storeId);
         if (!storeExists) {
             return { order: null, error: new StoreNotFoundError }
@@ -25,7 +24,6 @@ export class RegisterOrderService {
             storeId,
             status: "pending",
             customerId,
-            customerIdStripe,
             fullPriceOrderInCents: 0,
         })
         return { order: orderRegister, error: null };
