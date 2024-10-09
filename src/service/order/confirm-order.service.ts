@@ -5,6 +5,7 @@ import { ProductRepostory } from "../../repository/product-repository";
 import { OrderNotFoundError } from "../error/order-not-found-error";
 import { ProductNotFoundError } from "../error/product-not-found-error";
 import { InsufficientStockError } from "../error/insufficient-stock-error";
+import { OrderDoesNotHaveProductInOrderRegisted } from "../error/order-does-not-have-productinorder-registed";
 
 interface ConfirmOrderServiceRequest {
     id: string;
@@ -23,7 +24,7 @@ export class ConfirmOrderService {
         }
         const productInOrders = await this.productInOrderRepository.listAllByOrder(OrderExists.id);
         if (!productInOrders || productInOrders.length === 0) {
-            return { order: null, error: new Error("Order does not have productInOrder registered") };
+            return { order: null, error: new OrderDoesNotHaveProductInOrderRegisted};
         }
         let fullPriceOrderInCents = 0;
         for (const productInOrder of productInOrders) {
