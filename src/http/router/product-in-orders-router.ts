@@ -199,17 +199,17 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
 
     app.put("/", {
         schema: {
-            description: 'Atualizar um produto em um pedido específico',
+            description: 'Atualizar um produto em um pedido específico para um cliente',
             tags: ['Produtos em Pedido'],
             body: {
                 type: 'object',
                 properties: {
                     id: { type: 'string', description: 'ID do produto no pedido' },
-                    order_id: { type: 'string', description: 'ID do pedido' },
+                    customer_id: { type: 'string', description: 'ID do cliente' }, // Mudança para usar customer_id
                     product_id: { type: 'string', description: 'ID do produto' },
                     quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 0 }
                 },
-                required: ['id', 'order_id', 'product_id', 'quantity']
+                required: ['id', 'customer_id', 'product_id', 'quantity'] // Mudança para usar customer_id
             },
             response: {
                 200: {
@@ -233,13 +233,13 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     }
                 },
                 404: {
-                    description: 'Pedido ou produto não encontrado',
+                    description: 'Pedido, produto ou cliente não encontrado',
                     type: 'object',
                     properties: {
                         message: { type: 'string' }
                     },
                     example: {
-                        message: 'Order or product not found'
+                        message: 'Order, product, or customer not found'
                     }
                 },
                 400: {
