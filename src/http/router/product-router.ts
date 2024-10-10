@@ -5,6 +5,7 @@ import { ListProductByStoreIdController } from "../controller/product/list-produ
 import { RegisterProductController } from "../controller/product/register-product.controller";
 import { UpdateProductController } from "../controller/product/update-product.controller";
 import { DeleteProductByIdController } from "../controller/product/delete-product-by-id.controller";
+import { ListAllProductByCategoryRandomController } from "../controller/product/list-by-random-category-product.controller";
 
 
 export async function ProductRouter(app: FastifyInstance) {
@@ -75,6 +76,102 @@ export async function ProductRouter(app: FastifyInstance) {
          }
       }
    }, GetProductByIdController);
+   app.get("/listallbyrandomcategory", {
+      schema: {
+          description: 'Listar produtos de uma categoria aleatória',
+          tags: ['Produto'],
+          querystring: {
+              type: 'object',
+              properties: {
+                  page: { type: 'integer', description: 'Número da página para paginação', default: 1 },
+                  size: { type: 'integer', description: 'Tamanho da página para paginação', default: 10 }
+              }
+          },
+          response: {
+              200: {
+                  description: 'Produtos listados com sucesso de uma categoria aleatória',
+                  type: 'object',
+                  properties: {
+                      category: {
+                          type: 'object',
+                          properties: {
+                              id: { type: 'string', description: 'ID da categoria' },
+                              title: { type: 'string', description: 'Título da categoria' },
+                              slug: { type: 'string', description: 'Slug da categoria' }
+                          }
+                      },
+                      products: {
+                          type: 'array',
+                          items: {
+                              type: 'object',
+                              properties: {
+                                  id: { type: 'string', description: 'ID do produto' },
+                                  title: { type: 'string', description: 'Título do produto' },
+                                  slug: { type: 'string', description: 'Slug do produto' },
+                                  imageUrl: { type: 'string', format: 'url', description: 'URL da imagem do produto' },
+                                  description: { type: 'string', description: 'Descrição do produto' },
+                                  priceInCents: { type: 'number', description: 'Preço do produto em centavos' },
+                                  stock: { type: 'number', description: 'Quantidade em estoque' },
+                                  categoryId: { type: 'string', description: 'ID da categoria do produto' },
+                                  storeId: { type: 'string', description: 'ID da loja do produto' },
+                                  isActive: { type: 'boolean', description: 'Status do produto (ativo ou inativo)' },
+                                  createdAt: { type: 'string', format: 'date-time', description: 'Data de criação do produto' },
+                                  updatedAt: { type: 'string', format: 'date-time', description: 'Data da última atualização do produto' }
+                              }
+                          }
+                      },
+                      totalPages: { type: 'number', description: 'Total de páginas disponíveis' },
+                      currentPage: { type: 'number', description: 'Número da página atual' }
+                  },
+                  example: {
+                      category: {
+                          id: '67890',
+                          title: 'Categoria Exemplo',
+                          slug: 'categoria-exemplo'
+                      },
+                      products: [
+                          {
+                              id: '12345',
+                              title: 'Produto Exemplo',
+                              slug: 'produto-exemplo',
+                              imageUrl: 'https://example.com/produto.jpg',
+                              description: 'Este é um produto exemplo',
+                              priceInCents: 1500,
+                              stock: 20,
+                              categoryId: '67890',
+                              storeId: '54321',
+                              isActive: true,
+                              createdAt: '2024-10-06T10:00:00Z',
+                              updatedAt: '2024-10-06T12:00:00Z'
+                          }
+                      ],
+                      totalPages: 5,
+                      currentPage: 1
+                  }
+              },
+              404: {
+                  description: 'Categoria não encontrada',
+                  type: 'object',
+                  properties: {
+                      message: { type: 'string' }
+                  },
+                  example: {
+                      message: 'Category not found'
+                  }
+              },
+              500: {
+                  description: 'Erro interno do servidor',
+                  type: 'object',
+                  properties: {
+                      message: { type: 'string' }
+                  },
+                  example: {
+                      message: 'Internal Server Error'
+                  }
+              }
+          }
+      }
+  }, ListAllProductByCategoryRandomController);
    app.get("/listbycategory", {
       schema: {
          description: 'Listar produtos por categoria',
