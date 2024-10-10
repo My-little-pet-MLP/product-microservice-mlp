@@ -136,7 +136,7 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
             body: {
                 type: 'object',
                 properties: {
-                    order_id: { type: 'string', description: 'ID do pedido' },
+                    customer_id: { type: 'string', description: 'ID do customer' },
                     product_id: { type: 'string', description: 'ID do produto' },
                     quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 1 }
                 },

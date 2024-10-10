@@ -33,7 +33,7 @@ export class UpdateProductInOrdersService {
         if (quantity < 0) {
             return { productInOrders: null, error: new QuantityIsNegativeError };
         }
-        const productInOrders = await this.productInOrdersRepository.update(id, { orderId, productId, quantity });
+        const productInOrders = await this.productInOrdersRepository.update(id, { productId, quantity });
 
         return { productInOrders, error: null }
     }

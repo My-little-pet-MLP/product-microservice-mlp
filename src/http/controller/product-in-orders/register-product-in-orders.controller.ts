@@ -11,11 +11,11 @@ import { QuantityIsNegativeError } from "../../../service/error/quantity-is-nega
 
 export async function RegisterProductInOrdersController(req: FastifyRequest, res: FastifyReply) {
     const registerProductInOrdersBodySchema = z.object({
-        order_id: z.string().min(1, "order_id is required"),
+        customer_id: z.string().min(1, "customer_id is required"),
         product_id: z.string().min(1, "product_id is required"),
         quantity: z.number().int().min(0, "quantity is negative"),
     })
-    const { order_id, product_id, quantity } = registerProductInOrdersBodySchema.parse(req.body)
+    const { customer_id, product_id, quantity } = registerProductInOrdersBodySchema.parse(req.body)
 
     const productInOrdersRepository = new ProductInOrderRepositoryPrisma()
     const orderRepository = new OrderRepositoryPrisma()
@@ -23,7 +23,7 @@ export async function RegisterProductInOrdersController(req: FastifyRequest, res
 
     const registerProductInOrdersService = new RegisterProductInOrdersService(productInOrdersRepository, orderRepository, productRepository);
 
-    const { productInOrders, error } = await registerProductInOrdersService.execute({ orderId: order_id, productId: product_id, quantity })
+    const { productInOrders, error } = await registerProductInOrdersService.execute({ customerId: customer_id, productId: product_id, quantity })
 
     if (error) {
         if (error instanceof OrderNotFoundError || error instanceof ProductNotFoundError) {
