@@ -6,6 +6,7 @@ import { RegisterProductController } from "../controller/product/register-produc
 import { UpdateProductController } from "../controller/product/update-product.controller";
 import { DeleteProductByIdController } from "../controller/product/delete-product-by-id.controller";
 import { ListAllProductByCategoryRandomController } from "../controller/product/list-by-random-category-product.controller";
+import { ListProductByRandomStoreController } from "../controller/product/list-product-by-store-random.controller";
 
 
 export async function ProductRouter(app: FastifyInstance) {
@@ -172,6 +173,113 @@ export async function ProductRouter(app: FastifyInstance) {
           }
       }
   }, ListAllProductByCategoryRandomController);
+  app.get("/listbyrandomstore", {
+   schema: {
+       description: 'Listar produtos de uma loja aleatória',
+       tags: ['Produto'],
+       querystring: {
+           type: 'object',
+           properties: {
+               page: { type: 'integer', description: 'Número da página para paginação', default: 1 },
+               size: { type: 'integer', description: 'Tamanho da página para paginação', default: 10 }
+           }
+       },
+       response: {
+           200: {
+               description: 'Produtos listados com sucesso de uma loja aleatória',
+               type: 'object',
+               properties: {
+                   store: {
+                       type: 'object',
+                       properties: {
+                           id: { type: 'string', description: 'ID da loja' },
+                           imageUrl: { type: 'string', format: 'url', description: 'URL da imagem da loja' },
+                           title: { type: 'string', description: 'Título da loja' },
+                           description: { type: 'string', description: 'Descrição da loja' },
+                           cnpj: { type: 'string', description: 'CNPJ da loja' },
+                           userId: { type: 'string', description: 'ID do usuário dono da loja' },
+                           isActive: { type: 'boolean', description: 'Status da loja (ativa ou inativa)' },
+                           createdAt: { type: 'string', format: 'date-time', description: 'Data de criação da loja' },
+                           updatedAt: { type: 'string', format: 'date-time', description: 'Data da última atualização da loja' }
+                       }
+                   },
+                   products: {
+                       type: 'array',
+                       items: {
+                           type: 'object',
+                           properties: {
+                               id: { type: 'string', description: 'ID do produto' },
+                               title: { type: 'string', description: 'Título do produto' },
+                               slug: { type: 'string', description: 'Slug do produto' },
+                               imageUrl: { type: 'string', format: 'url', description: 'URL da imagem do produto' },
+                               description: { type: 'string', description: 'Descrição do produto' },
+                               priceInCents: { type: 'number', description: 'Preço do produto em centavos' },
+                               stock: { type: 'number', description: 'Quantidade em estoque' },
+                               storeId: { type: 'string', description: 'ID da loja do produto' },
+                               isActive: { type: 'boolean', description: 'Status do produto (ativo ou inativo)' },
+                               createdAt: { type: 'string', format: 'date-time', description: 'Data de criação do produto' },
+                               updatedAt: { type: 'string', format: 'date-time', description: 'Data da última atualização do produto' }
+                           }
+                       }
+                   },
+                   totalPages: { type: 'number', description: 'Total de páginas disponíveis' },
+                   currentPage: { type: 'number', description: 'Número da página atual' }
+               },
+               example: {
+                   store: {
+                       id: '67890',
+                       imageUrl: 'https://example.com/store.jpg',
+                       title: 'Loja Exemplo',
+                       description: 'Esta é uma loja exemplo',
+                       cnpj: '12.345.678/0001-99',
+                       userId: '123456',
+                       isActive: true,
+                       createdAt: '2024-10-06T10:00:00Z',
+                       updatedAt: '2024-10-06T12:00:00Z'
+                   },
+                   products: [
+                       {
+                           id: '12345',
+                           title: 'Produto Exemplo',
+                           slug: 'produto-exemplo',
+                           imageUrl: 'https://example.com/produto.jpg',
+                           description: 'Este é um produto exemplo',
+                           priceInCents: 1500,
+                           stock: 20,
+                           storeId: '67890',
+                           isActive: true,
+                           createdAt: '2024-10-06T10:00:00Z',
+                           updatedAt: '2024-10-06T12:00:00Z'
+                       }
+                   ],
+                   totalPages: 5,
+                   currentPage: 1
+               }
+           },
+           404: {
+               description: 'Loja não encontrada',
+               type: 'object',
+               properties: {
+                   message: { type: 'string' }
+               },
+               example: {
+                   message: 'Store not found'
+               }
+           },
+           500: {
+               description: 'Erro interno do servidor',
+               type: 'object',
+               properties: {
+                   message: { type: 'string' }
+               },
+               example: {
+                   message: 'Internal Server Error'
+               }
+           }
+       }
+   }
+}, ListProductByRandomStoreController);
+
    app.get("/listbycategory", {
       schema: {
          description: 'Listar produtos por categoria',

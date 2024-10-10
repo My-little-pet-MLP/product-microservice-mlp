@@ -3,6 +3,22 @@ import { StoreRepository } from "../store-repository";
 import { prisma } from "../../lib/prisma";
 
 export class StoreRepositoryPrisma implements StoreRepository {
+    async getRandomStore(): Promise<Store | null> {
+        const count = await prisma.store.count(); // Conta o número total de lojas
+
+        if (count === 0) {
+            return null; // Se não houver lojas, retorna null
+        }
+
+        const randomIndex = Math.floor(Math.random() * count); // Gera um índice aleatório
+
+        const store = await prisma.store.findMany({
+            skip: randomIndex, // Pula até o índice aleatório
+            take: 1, // Pega uma loja
+        });
+
+        return store[0]; // Retorna a loja ou null
+    }
     async reactivate(id: string): Promise<Store> {
         const store = await prisma.store.update(
             {

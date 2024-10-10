@@ -7,4 +7,6 @@ export interface StoreRepository {
     update(id:string,data:{cnpj:string,imageUrl:string,description:string,title:string}):Promise<Store|null>
     delete(id:string):Promise<void>
     reactivate(id:string):Promise<Store>
+
+    getRandomStore():Promise<Store|null>
 }
