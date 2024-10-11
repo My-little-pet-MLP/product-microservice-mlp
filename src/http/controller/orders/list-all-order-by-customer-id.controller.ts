@@ -7,8 +7,8 @@ import { OrderNotFoundError } from "../../../service/error/order-not-found-error
 export async function ListAllOrdersByCustomerIdController(req: FastifyRequest, res: FastifyReply) {
     const ListAllOrdersByCustomerIdQuerySchema = z.object({
         customer_id: z.string(),
-        page: z.number().int(),
-        size: z.number().int(),
+        page: z.coerce.number().int(),
+        size: z.coerce.number().int(),
     })
     const { customer_id, page, size } = ListAllOrdersByCustomerIdQuerySchema.parse(req.query);
 
