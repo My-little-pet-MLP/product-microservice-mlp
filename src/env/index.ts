@@ -20,7 +20,12 @@ const env = envSchema.safeParse(process.env);
 
 if (!env.success) {
     console.error("Error validating environment variables!", env.error.format());
-    process.exit(1); 
+    
+    // Em vez de process.exit, vamos lançar um erro durante os testes
+    if (process.env.NODE_ENV !== 'test') {
+        process.exit(1);
+    } else {
+        throw new Error("Environment variable validation failed");
+    }
 }
-
 export const config = env.data;
