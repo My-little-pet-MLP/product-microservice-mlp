@@ -69,93 +69,90 @@ export async function OrderRouter(app: FastifyInstance) {
             }
         }
     }, GetByIdOrderController);
-    app.get("/listAllByCustomerId", {
-        schema: {
-            description: 'Listar todos os pedidos de um cliente específico pelo ID do cliente',
-            tags: ['Pedido'],
-            querystring: {
+  app.get("/listAllByCustomerId", {
+    schema: {
+        description: 'Listar todos os pedidos de um cliente específico pelo ID do cliente',
+        tags: ['Pedido'],
+        querystring: {
+            type: 'object',
+            properties: {
+                customer_id: { type: 'string', description: 'ID do cliente' },
+                page: { type: 'integer', description: 'Número da página', minimum: 1 },
+                size: { type: 'integer', description: 'Tamanho da página', minimum: 1 }
+            },
+            required: ['customer_id', 'page', 'size']
+        },
+        response: {
+            200: {
+                description: 'Pedidos encontrados com sucesso',
                 type: 'object',
                 properties: {
-                    customer_id: { type: 'string', description: 'ID do cliente' },
-                    page: { type: 'integer', description: 'Número da página', minimum: 1 },
-                    size: { type: 'integer', description: 'Tamanho da página', minimum: 1 }
-                },
-                required: ['customer_id', 'page', 'size']
-            },
-            response: {
-                200: {
-                    description: 'Pedidos encontrados com sucesso',
-                    type: 'object',
-                    properties: {
-                        orders: {
-                            type: 'array',
-                            items: {
-                                type: 'object',
-                                properties: {
-                                    id: { type: 'string', description: 'ID do pedido' },
-                                    fullPriceOrderInCents: { type: 'number', description: 'Preço total do pedido em centavos' },
-                                    storeId: { type: 'string', description: 'ID da loja' },
-                                    status: { type: 'string', description: 'Status do pedido' },
-                                  
-                                    customerId: { type: 'string', description: 'ID do cliente' },
-                                    created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
-                                    updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
-                                }
+                    orders: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'string', description: 'ID do pedido' },
+                                fullPriceOrderInCents: { type: 'integer', description: 'Preço total do pedido em centavos' }, // Corrigido para integer
+                                storeId: { type: 'string', description: 'ID da loja' },
+                                status: { type: 'string', description: 'Status do pedido' },
+                                customerId: { type: 'string', description: 'ID do cliente' },
+                                created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
+                                updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
                             }
+                        }
+                    },
+                    totalPages: { type: 'integer', description: 'Total de páginas' },
+                    currentPage: { type: 'integer', description: 'Página atual' }
+                },
+                example: {
+                    orders: [
+                        {
+                            id: '12345',
+                            fullPriceOrderInCents: 5000,
+                            storeId: '67890',
+                            status: 'PENDING',
+                            customerId: 'cust_98765',
+                            created_at: '2024-10-06T10:00:00Z',
+                            updated_at: '2024-10-06T12:00:00Z'
                         },
-                        totalPages: { type: 'integer', description: 'Total de páginas' },
-                        currentPage: { type: 'integer', description: 'Página atual' }
-                    },
-                    example: {
-                        orders: [
-                            {
-                                id: '12345',
-                                fullPriceOrderInCents: 5000,
-                                storeId: '67890',
-                                status: 'PENDING',
-                             
-                                customerId: 'cust_98765',
-                                created_at: '2024-10-06T10:00:00Z',
-                                updated_at: '2024-10-06T12:00:00Z'
-                            },
-                            {
-                                id: '67890',
-                                fullPriceOrderInCents: 12000,
-                                storeId: '54321',
-                                status: 'COMPLETED',
-                           
-                                customerId: 'cust_98765',
-                                created_at: '2024-10-07T10:00:00Z',
-                                updated_at: '2024-10-07T12:00:00Z'
-                            }
-                        ],
-                        totalPages: 5,
-                        currentPage: 1
-                    }
+                        {
+                            id: '67890',
+                            fullPriceOrderInCents: 12000,
+                            storeId: '54321',
+                            status: 'COMPLETED',
+                            customerId: 'cust_98765',
+                            created_at: '2024-10-07T10:00:00Z',
+                            updated_at: '2024-10-07T12:00:00Z'
+                        }
+                    ],
+                    totalPages: 5,
+                    currentPage: 1
+                }
+            },
+            404: {
+                description: 'Pedidos não encontrados',
+                type: 'object',
+                properties: {
+                    message: { type: 'string' }
                 },
-                404: {
-                    description: 'Pedidos não encontrados',
-                    type: 'object',
-                    properties: {
-                        message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Orders not found'
-                    }
+                example: {
+                    message: 'Orders not found'
+                }
+            },
+            500: {
+                description: 'Erro interno do servidor',
+                type: 'object',
+                properties: {
+                    message: { type: 'string' }
                 },
-                500: {
-                    description: 'Erro interno do servidor',
-                    type: 'object',
-                    properties: {
-                        message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Internal Server Error'
-                    }
+                example: {
+                    message: 'Internal Server Error'
                 }
             }
         }
-    }, ListAllOrdersByCustomerIdController);
+    }
+}, ListAllOrdersByCustomerIdController);
 
     app.post("/", {
         schema: {
