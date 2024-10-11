@@ -11,7 +11,8 @@ on:
       - developer
 
 jobs:
-  test:
+  testes:  # O nome do job
+    name: Testes dos services  # Nome que aparecerá na interface do GitHub
     runs-on: ubuntu-latest
 
     strategy:
