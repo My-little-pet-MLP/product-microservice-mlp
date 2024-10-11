@@ -18,10 +18,14 @@ jobs:
       matrix:
         node-version: [18.x]
 
-    env:  # Variáveis de ambiente definidas no nível do job
+    env:  # Definindo as variáveis de ambiente
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}  # Use os segredos do GitHub
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
       CLERK_SECRET_KEY_CUSTOMER: ${{ secrets.CLERK_SECRET_KEY_CUSTOMER }}
       NODE_ENV: test
+      PORT: 3333
+      SERVER_URL: http://localhost:3333
+      STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
 
     steps:
     - name: Checkout repository
