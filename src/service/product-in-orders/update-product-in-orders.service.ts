@@ -7,6 +7,8 @@ import { OrderRepository } from "../../repository/order-repository";
 import { ProductRepostory } from "../../repository/product-repository";
 import { clearkClientCustomer } from "../../lib/cleark";
 import { OrderIsNotPedingError } from "../error/order-is-not-peding-error";
+import { CustomerNotFoundError } from "../error/customer-not-found-error";
+import { ErrorFetchingCustomerError } from "../error/error-fetchig-customer-error";
 
 interface UpdateProductInOrdersServiceRequest {
     id: string;
@@ -31,10 +33,10 @@ export class UpdateProductInOrdersService {
         try {
             const customerExists = await clearkClientCustomer.users.getUser(customerId);
             if (!customerExists) {
-                return { productInOrders: null, error: new Error("Customer not found") };
+                return { productInOrders: null, error: new CustomerNotFoundError() };
             }
         } catch (error) {
-            return { productInOrders: null, error: new Error("Error fetching customer") };
+            return { productInOrders: null, error: new ErrorFetchingCustomerError() };
         }
 
         // Verifica se o produto existe e está ativo
@@ -51,7 +53,7 @@ export class UpdateProductInOrdersService {
         // Verifica se o cliente tem um pedido pendente na loja do produto
         const existingOrder = await this.orderRepository.verifyCustomerHavePedingOrder(customerId, productExists.storeId);
         if (!existingOrder) {
-            return { productInOrders: null, error: new OrderNotFoundError() };
+            return { productInOrders: null, error: new OrderIsNotPedingError() };
         }
 
         // Verifica se o status do pedido é "pending"

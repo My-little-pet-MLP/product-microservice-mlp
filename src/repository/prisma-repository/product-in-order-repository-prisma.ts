@@ -20,7 +20,7 @@ export class ProductInOrderRepositoryPrisma implements ProductInOrderRepository 
         })
         return productInOrders;
     }
-    async register(data: Prisma.ProductInOrdersUncheckedCreateInput): Promise<ProductInOrders | null> {
+    async register(data: Prisma.ProductInOrdersUncheckedCreateInput): Promise<ProductInOrders> {
         const productInOrders = await prisma.productInOrders.create({
             data: {
                 orderId: data.orderId,
