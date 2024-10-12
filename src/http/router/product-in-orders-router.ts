@@ -136,11 +136,11 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
             body: {
                 type: 'object',
                 properties: {
-                    customer_id: { type: 'string', description: 'ID do customer' },
+                    customer_id: { type: 'string', description: 'ID do cliente' },
                     product_id: { type: 'string', description: 'ID do produto' },
-                    quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 1 }
+                    quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 0 }
                 },
-                required: ['order_id', 'product_id', 'quantity']
+                required: ['customer_id', 'product_id', 'quantity'] // Atualizado, sem 'order_id'
             },
             response: {
                 200: {
@@ -151,12 +151,12 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                         productId: { type: 'string', description: 'ID do produto' },
                         quantity: { type: 'number', description: 'Quantidade do produto no pedido' },
                         orderId: { type: 'string', description: 'ID do pedido' },
-                        created_at: { type: 'string', format: 'date-time', description: 'Data de criação do item no pedido' },
-                        updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do item no pedido' }
+                        created_at: { type: 'string', format: 'date-time', description: 'Data de criação' },
+                        updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização' }
                     },
                     example: {
                         id: '1',
-                        productId: '12345',
+                        productId: 'cm23lq1k300018bxxx5muq3pv',
                         quantity: 5,
                         orderId: '67890',
                         created_at: '2024-10-06T10:00:00Z',
@@ -174,7 +174,7 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     }
                 },
                 400: {
-                    description: 'Pedido não está pendente ou quantidade é negativa',
+                    description: 'Erro de validação de pedido ou quantidade negativa',
                     type: 'object',
                     properties: {
                         message: { type: 'string' }
