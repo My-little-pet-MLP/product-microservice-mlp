@@ -97,8 +97,7 @@ export class InMemoryProductRepository implements ProductRepostory {
   }
 
   async getById(id: string): Promise<InMemoryProduct | null> {
-    const product = this.products.find(product => product.id === id);
-    return product || null;
+    return this.products.find(product => product.id === id) || null;
   }
 
   async listProductsByStoreId(storeId: string, page: number, size: number): Promise<InMemoryProduct[]> {
@@ -109,9 +108,12 @@ export class InMemoryProductRepository implements ProductRepostory {
       .slice(skip, skip + size);
   }
 
-  async register(data: Omit<InMemoryProduct, "id" | "createdAt" | "updatedAt">): Promise<InMemoryProduct> {
+  async register(
+    data: Omit<InMemoryProduct, "id" | "createdAt" | "updatedAt">,
+    id?: string // ID opcional
+  ): Promise<InMemoryProduct> {
     const newProduct: InMemoryProduct = {
-      id: this.generateId(),
+      id: id || this.generateId(), // Usar ID passado ou gerar um novo
       createdAt: this.currentDate(),
       updatedAt: this.currentDate(),
       ...data,
