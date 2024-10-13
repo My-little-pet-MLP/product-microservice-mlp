@@ -23,30 +23,20 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     items: {
                         type: 'object',
                         properties: {
-                            id: { type: 'string', description: 'ID do produto no pedido' },
-                            productId: { type: 'string', description: 'ID do produto' },
-                            quantity: { type: 'number', description: 'Quantidade do produto no pedido' },
-                            orderId: { type: 'string', description: 'ID do pedido' },
-                            created_at: { type: 'string', format: 'date-time', description: 'Data de criação do item no pedido' },
-                            updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do item no pedido' }
+                            id: { type: 'string', description: 'ID do produto' },
+                            name: { type: 'string', description: 'Nome do produto' },
+                            image: { type: 'string', description: 'URL da imagem do produto' },
+                            price: { type: 'number', description: 'Preço total (quantidade * preço unitário)' },
+                            quantity: { type: 'number', description: 'Quantidade do produto no pedido' }
                         }
                     },
                     example: [
                         {
-                            id: '1',
-                            productId: '12345',
-                            quantity: 3,
-                            orderId: '67890',
-                            created_at: '2024-10-06T10:00:00Z',
-                            updated_at: '2024-10-06T12:00:00Z'
-                        },
-                        {
-                            id: '2',
-                            productId: '54321',
-                            quantity: 1,
-                            orderId: '67890',
-                            created_at: '2024-10-06T11:00:00Z',
-                            updated_at: '2024-10-06T12:00:00Z'
+                            id: "cm23lq1k300018bxxx5muq3pv",
+                            name: "Ração Premium Cães Adultos",
+                            image: "https://example.com/imagem.jpg",
+                            price: 259.8,
+                            quantity: 2
                         }
                     ]
                 },
