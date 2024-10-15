@@ -12,71 +12,109 @@ import { ListProductByRandomStoreController } from "../controller/product/list-p
 export async function ProductRouter(app: FastifyInstance) {
    app.get("/:id", {
       schema: {
-         description: 'Obter um produto pelo ID',
-         tags: ['Produto'],
-         params: {
-            type: 'object',
+        description: "Obter um produto pelo ID",
+        tags: ["Produto"],
+        params: {
+          type: "object",
+          properties: {
+            id: { type: "string", description: "ID do produto" },
+          },
+          required: ["id"],
+        },
+        response: {
+          200: {
+            description: "Produto encontrado com sucesso",
+            type: "object",
             properties: {
-               id: { type: 'string', description: 'ID do produto' }
+              id: { type: "string", description: "ID do produto" },
+              title: { type: "string", description: "Título do produto" },
+              slug: { type: "string", description: "Slug do produto" },
+              imageUrl: { type: "string", format: "url", description: "URL da imagem do produto" },
+              description: { type: "string", description: "Descrição do produto" },
+              priceInCents: { type: "number", description: "Preço do produto em centavos" },
+              stock: { type: "number", description: "Quantidade em estoque" },
+              category: {
+                type: "object",
+                description: "Informações da categoria",
+                properties: {
+                  id: { type: "string", description: "ID da categoria" },
+                  title: { type: "string", description: "Título da categoria" },
+                  slug: { type: "string", description: "Slug da categoria" },
+                },
+              },
+              store: {
+                type: "object",
+                description: "Informações da loja",
+                properties: {
+                  id: { type: "string", description: "ID da loja" },
+                  imageUrl: { type: "string", format: "url", description: "URL da imagem da loja" },
+                  title: { type: "string", description: "Título da loja" },
+                  description: { type: "string", description: "Descrição da loja" },
+                  cnpj: { type: "string", description: "CNPJ da loja" },
+                  userId: { type: "string", description: "ID do usuário responsável" },
+                  isActive: { type: "boolean", description: "Status da loja (ativa ou inativa)" },
+                  createdAt: { type: "string", format: "date-time", description: "Data de criação da loja" },
+                  updatedAt: { type: "string", format: "date-time", description: "Data da última atualização da loja" },
+                },
+              },
+              isActive: { type: "boolean", description: "Status do produto (ativo ou inativo)" },
+              createdAt: { type: "string", format: "date-time", description: "Data de criação do produto" },
+              updatedAt: { type: "string", format: "date-time", description: "Data da última atualização do produto" },
             },
-            required: ['id']
-         },
-         response: {
-            200: {
-               description: 'Produto encontrado com sucesso',
-               type: 'object',
-               properties: {
-                  id: { type: 'string', description: 'ID do produto' },
-                  title: { type: 'string', description: 'Título do produto' },
-                  slug: { type: 'string', description: 'Slug do produto' },
-                  imageUrl: { type: 'string', format: 'url', description: 'URL da imagem do produto' },
-                  description: { type: 'string', description: 'Descrição do produto' },
-                  priceInCents: { type: 'number', description: 'Preço do produto em centavos' },
-                  stock: { type: 'number', description: 'Quantidade em estoque' },
-                  categoryId: { type: 'string', description: 'ID da categoria do produto' },
-                  storeId: { type: 'string', description: 'ID da loja do produto' },
-                  isActive: { type: 'boolean', description: 'Status do produto (ativo ou inativo)' },
-                  createdAt: { type: 'string', format: 'date-time', description: 'Data de criação do produto' },
-                  updatedAt: { type: 'string', format: 'date-time', description: 'Data da última atualização do produto' }
-               },
-               example: {
-                  id: '12345',
-                  title: 'Produto Exemplo',
-                  slug: 'produto-exemplo',
-                  imageUrl: 'https://example.com/produto.jpg',
-                  description: 'Este é um produto exemplo',
-                  priceInCents: 1500,
-                  stock: 20,
-                  categoryId: '67890',
-                  storeId: '54321',
-                  isActive: true,
-                  createdAt: '2024-10-06T10:00:00Z',
-                  updatedAt: '2024-10-06T12:00:00Z'
-               }
+            example: {
+              id: "12345",
+              title: "Produto Exemplo",
+              slug: "produto-exemplo",
+              imageUrl: "https://example.com/produto.jpg",
+              description: "Este é um produto exemplo",
+              priceInCents: 1500,
+              stock: 20,
+              category: {
+                id: "67890",
+                title: "Eletrônicos",
+                slug: "eletronicos",
+              },
+              store: {
+                id: "54321",
+                imageUrl: "https://example.com/loja.jpg",
+                title: "Loja Exemplo",
+                description: "Uma loja exemplo",
+                cnpj: "12.345.678/0001-99",
+                userId: "user123",
+                isActive: true,
+                createdAt: "2024-10-06T10:00:00Z",
+                updatedAt: "2024-10-06T12:00:00Z",
+              },
+              isActive: true,
+              createdAt: "2024-10-06T10:00:00Z",
+              updatedAt: "2024-10-06T12:00:00Z",
             },
-            404: {
-               description: 'Produto não encontrado',
-               type: 'object',
-               properties: {
-                  message: { type: 'string' }
-               },
-               example: {
-                  message: 'Product not found'
-               }
+          },
+          404: {
+            description: "Produto não encontrado",
+            type: "object",
+            properties: {
+              message: { type: "string" },
             },
-            500: {
-               description: 'Erro interno do servidor',
-               type: 'object',
-               properties: {
-                  message: { type: 'string' }
-               },
-               example: {
-                  message: 'Internal Server Error'
-               }
-            }
-         }
-      }
-   }, GetProductByIdController);
+            example: {
+              message: "Product not found",
+            },
+          },
+          500: {
+            description: "Erro interno do servidor",
+            type: "object",
+            properties: {
+              message: { type: "string" },
+            },
+            example: {
+              message: "Internal Server Error",
+            },
+          },
+        },
+      },
+    }, GetProductByIdController);
+    
+    
    app.get("/listallbyrandomcategory", {
       schema: {
           description: 'Listar produtos de uma categoria aleatória',

@@ -1,4 +1,3 @@
-import { ProductInOrders } from "@prisma/client";
 import { ProductInOrderRepository } from "../../repository/product-in-order-repository";
 import { OrderRepository } from "../../repository/order-repository";
 import { ProductRepostory } from "../../repository/product-repository";
