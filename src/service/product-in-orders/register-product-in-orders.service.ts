@@ -4,11 +4,9 @@ import { OrderRepository } from "../../repository/order-repository";
 import { ProductRepostory } from "../../repository/product-repository";
 import { ProductNotFoundError } from "../error/product-not-found-error";
 import { QuantityIsNegativeError } from "../error/quantity-is-negative-error";
-import { OrderIsNotPedingError } from "../error/order-is-not-peding-error";
 import { clearkClientCustomer } from "../../lib/cleark";
 import { CustomerNotFoundError } from "../error/customer-not-found-error";
 import { ErrorFetchingCustomerError } from "../error/error-fetchig-customer-error";
-import { FailedToRegisterProductInOrderError } from "../error/failed-to-register-product-in-order-error";
 
 interface RegisterProductInOrdersServiceRequest {
     customerId: string;
@@ -26,14 +24,13 @@ export class RegisterProductInOrdersService {
         private productInOrdersRepository: ProductInOrderRepository,
         private orderRepository: OrderRepository,
         private productRepository: ProductRepostory
-    ) {}
+    ) { }
 
     async execute({
+        customerId,
         productId,
         quantity,
-        customerId,
     }: RegisterProductInOrdersServiceRequest): Promise<RegisterProductInOrdersServiceResponse> {
-        // Verifica se o cliente existe
         try {
             const customerExists = await clearkClientCustomer.users.getUser(customerId);
             if (!customerExists) {
@@ -43,59 +40,73 @@ export class RegisterProductInOrdersService {
             return { productInOrders: null, error: new ErrorFetchingCustomerError() };
         }
 
-        // Verifica se o produto existe e está ativo
-        const productExists = await this.productRepository.getById(productId);
-        if (!productExists || !productExists.isActive) {
+        const product = await this.productRepository.getById(productId);
+        if (!product || !product.isActive) {
             return { productInOrders: null, error: new ProductNotFoundError() };
         }
 
-        // Verifica se a quantidade é válida
         if (quantity < 0) {
             return { productInOrders: null, error: new QuantityIsNegativeError() };
         }
 
-        // Verifica se o cliente tem um pedido pendente na mesma loja
-        const existingOrder = await this.orderRepository.verifyCustomerHavePedingOrder(customerId, productExists.storeId);
+        let order = await this.orderRepository.verifyCustomerHavePedingOrder(
+            customerId,
+            product.storeId
+        );
 
-        let orderId: string;
-        if (!existingOrder) {
-            // Cria novo pedido se não houver nenhum pendente
-            const newOrder = await this.orderRepository.register({
+        if (!order) {
+            order = await this.orderRepository.register({
                 customerId,
-                fullPriceOrderInCents: productExists.priceInCents * quantity,
+                fullPriceOrderInCents: 0,
                 status: "pending",
-                storeId: productExists.storeId,
+                storeId: product.storeId,
             });
-            orderId = newOrder.id;
-        } else {
-            // Se já houver um pedido, verifica o status
-            if (existingOrder.status !== "pending") {
-                // Se o status for diferente de 'pending', cria um novo pedido pendente
-                const newOrder = await this.orderRepository.register({
-                    customerId,
-                    fullPriceOrderInCents: productExists.priceInCents * quantity,
-                    status: "pending",
-                    storeId: productExists.storeId,
-                });
-                orderId = newOrder.id;
-            } else {
-                // Se o pedido existente estiver no status 'pending', reutiliza o mesmo pedido
-                orderId = existingOrder.id;
+        }
+
+        let productInOrder = await this.productInOrdersRepository.getByOrderAndProductId(
+            order.id,
+            productId
+        );
+
+        if (productInOrder) {
+            const newQuantity = productInOrder.quantity + quantity;
+            if (newQuantity < 0) {
+                return { productInOrders: null, error: new QuantityIsNegativeError() };
             }
+
+            productInOrder = await this.productInOrdersRepository.update(
+                productInOrder.id,
+                {
+                    orderId: order.id,
+                    productId,
+                    quantity: newQuantity
+                }
+            );
+        } else {
+            productInOrder = await this.productInOrdersRepository.register({
+                orderId: order.id,
+                productId,
+                quantity,
+            });
         }
 
-        // Registra o produto no pedido
-        const productInOrders = await this.productInOrdersRepository.register({
-            orderId,
-            productId,
-            quantity,
-        });
+        const updatedFullPrice = await this.calculateFullPrice(order.id);
+        await this.orderRepository.updateFullPrice(order.id, updatedFullPrice);
 
-        if (!productInOrders) {
-            return { productInOrders: null, error: new FailedToRegisterProductInOrderError() };
-        }
+        return { productInOrders: productInOrder, error: null };
+    }
 
-        return { productInOrders, error: null };
+    private async calculateFullPrice(orderId: string): Promise<number> {
+        const productsInOrder = await this.productInOrdersRepository.listAllByOrder(orderId) || [];
+
+        const productIds = productsInOrder.map((p) => p.productId);
+        const products = await this.productRepository.getByIds(productIds);
+
+        const priceMap = new Map(products.map((p) => [p.id, p.priceInCents]));
+
+        return productsInOrder.reduce((total, productInOrder) => {
+            const price = priceMap.get(productInOrder.productId) || 0;
+            return total + productInOrder.quantity * price;
+        }, 0);
     }
 }
-    

@@ -100,6 +100,12 @@ export class InMemoryProductRepository implements ProductRepostory {
     return this.products.find(product => product.id === id) || null;
   }
 
+  // **Implementação do getByIds**
+  async getByIds(ids: string[]): Promise<InMemoryProduct[]> {
+    return this.products.filter((product) => ids.includes(product.id));
+  }
+
+
   async listProductsByStoreId(storeId: string, page: number, size: number): Promise<InMemoryProduct[]> {
     const skip = (page - 1) * size;
 

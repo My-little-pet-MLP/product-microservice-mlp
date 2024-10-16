@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ListAllByOrderIdController } from "../controller/product-in-orders/list-all-by-order-id.controller";
-import { RegisterProductInOrdersController } from "../controller/product-in-orders/register-product-in-orders.controller";
+import { registerProductInOrdersController } from "../controller/product-in-orders/register-product-in-orders.controller";
 import { GetProductInOrderByIdController } from "../controller/product-in-orders/get-product-in-order-by-id.controller";
 import { UpdateProductInOrdersController } from "../controller/product-in-orders/update-product-in-orders.controller";
 
@@ -125,12 +125,25 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
             tags: ['Produtos em Pedido'],
             body: {
                 type: 'object',
+                required: ['customer_id', 'product_id', 'quantity'],
                 properties: {
-                    customer_id: { type: 'string', description: 'ID do cliente' },
-                    product_id: { type: 'string', description: 'ID do produto' },
-                    quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 0 }
-                },
-                required: ['customer_id', 'product_id', 'quantity'] // Atualizado, sem 'order_id'
+                    customer_id: {
+                        type: 'string',
+                        description: 'ID do cliente',
+                        example: 'user_2nU1lHvr8adJLWWhPURNmxP2YDV'
+                    },
+                    product_id: {
+                        type: 'string',
+                        description: 'ID do produto',
+                        example: 'cm23lq1k300018bxxx5muq3pv'
+                    },
+                    quantity: {
+                        type: 'integer',
+                        description: 'Quantidade do produto no pedido',
+                        minimum: 0,
+                        example: 5
+                    }
+                }
             },
             response: {
                 200: {
@@ -139,10 +152,18 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     properties: {
                         id: { type: 'string', description: 'ID do produto no pedido' },
                         productId: { type: 'string', description: 'ID do produto' },
-                        quantity: { type: 'number', description: 'Quantidade do produto no pedido' },
+                        quantity: { type: 'integer', description: 'Quantidade do produto no pedido' },
                         orderId: { type: 'string', description: 'ID do pedido' },
-                        created_at: { type: 'string', format: 'date-time', description: 'Data de criação' },
-                        updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização' }
+                        created_at: { 
+                            type: 'string', 
+                            format: 'date-time', 
+                            description: 'Data de criação' 
+                        },
+                        updated_at: { 
+                            type: 'string', 
+                            format: 'date-time', 
+                            description: 'Data de atualização' 
+                        }
                     },
                     example: {
                         id: '1',
@@ -185,7 +206,8 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                 }
             }
         }
-    }, RegisterProductInOrdersController);
+    }, registerProductInOrdersController);
+    
 
     app.put("/", {
         schema: {
