@@ -129,19 +129,16 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                 properties: {
                     customer_id: {
                         type: 'string',
-                        description: 'ID do cliente',
-                        example: 'user_2nU1lHvr8adJLWWhPURNmxP2YDV'
+                        description: 'ID do cliente'
                     },
                     product_id: {
                         type: 'string',
-                        description: 'ID do produto',
-                        example: 'cm23lq1k300018bxxx5muq3pv'
+                        description: 'ID do produto'
                     },
                     quantity: {
                         type: 'integer',
                         description: 'Quantidade do produto no pedido',
-                        minimum: 0,
-                        example: 5
+                        minimum: 0
                     }
                 }
             },
@@ -154,24 +151,8 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                         productId: { type: 'string', description: 'ID do produto' },
                         quantity: { type: 'integer', description: 'Quantidade do produto no pedido' },
                         orderId: { type: 'string', description: 'ID do pedido' },
-                        created_at: { 
-                            type: 'string', 
-                            format: 'date-time', 
-                            description: 'Data de criação' 
-                        },
-                        updated_at: { 
-                            type: 'string', 
-                            format: 'date-time', 
-                            description: 'Data de atualização' 
-                        }
-                    },
-                    example: {
-                        id: '1',
-                        productId: 'cm23lq1k300018bxxx5muq3pv',
-                        quantity: 5,
-                        orderId: '67890',
-                        created_at: '2024-10-06T10:00:00Z',
-                        updated_at: '2024-10-06T12:00:00Z'
+                        created_at: { type: 'string', format: 'date-time', description: 'Data de criação' },
+                        updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização' }
                     }
                 },
                 404: {
@@ -179,9 +160,6 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     type: 'object',
                     properties: {
                         message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Order or product not found'
                     }
                 },
                 400: {
@@ -189,9 +167,6 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     type: 'object',
                     properties: {
                         message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Order is not pending or quantity is negative'
                     }
                 },
                 500: {
@@ -199,14 +174,12 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     type: 'object',
                     properties: {
                         message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Internal Server Error!'
                     }
                 }
             }
         }
     }, registerProductInOrdersController);
+    
     
 
     app.put("/", {
