@@ -103,4 +103,10 @@ export class OrderRepositoryPrisma implements OrderRepository {
         })
         return order;
     }
+    async updateFullPrice(orderId: string, newFullPrice: number): Promise<void> {
+        await prisma.order.update({
+            where: { id: orderId },
+            data: { fullPriceOrderInCents: newFullPrice },
+        });
+    }
 }

@@ -24,13 +24,45 @@ export class InMemoryProductInOrderRepository implements ProductInOrderRepositor
     return new Date();
   }
 
+  async getByOrderAndProductId(orderId: string, productId: string): Promise<ProductInOrders | null> {
+    const productInOrder = this.productsInOrder.find(
+      (product) => product.orderId === orderId && product.productId === productId
+    );
+    return productInOrder || null;
+  }
+
+  async updateQuantity(
+    orderId: string,
+    productId: string,
+    quantity: number
+  ): Promise<InMemoryProductInOrders | null> {
+    const productInOrder = await this.getByOrderAndProductId(orderId, productId);
+  
+    if (!productInOrder) return null;
+  
+    productInOrder.quantity += quantity;
+    productInOrder.updated_at = this.currentDate();
+  
+    // Atualizar o array no repositório para refletir a mudança
+    const index = this.productsInOrder.findIndex(
+      (p) => p.orderId === orderId && p.productId === productId
+    );
+    if (index !== -1) {
+      this.productsInOrder[index] = productInOrder; // Persistindo a alteração
+    }
+  
+    return productInOrder;
+  }
+
   async listAllByOrder(orderId: string): Promise<InMemoryProductInOrders[] | null> {
-    const productsInOrder = this.productsInOrder.filter(product => product.orderId === orderId);
+    const productsInOrder = this.productsInOrder.filter(
+      (product) => product.orderId === orderId
+    );
     return productsInOrder.length > 0 ? productsInOrder : null;
   }
 
   async findById(id: string): Promise<InMemoryProductInOrders | null> {
-    const productInOrder = this.productsInOrder.find(product => product.id === id);
+    const productInOrder = this.productsInOrder.find((product) => product.id === id);
     return productInOrder || null;
   }
 
@@ -48,8 +80,11 @@ export class InMemoryProductInOrderRepository implements ProductInOrderRepositor
     return newProductInOrder;
   }
 
-  async update(id: string, data: { productId?: string; quantity?: number }): Promise<InMemoryProductInOrders | null> {
-    const productIndex = this.productsInOrder.findIndex(product => product.id === id);
+  async update(
+    id: string,
+    data: { productId?: string; quantity?: number }
+  ): Promise<InMemoryProductInOrders | null> {
+    const productIndex = this.productsInOrder.findIndex((product) => product.id === id);
     if (productIndex === -1) return null;
 
     const updatedProduct = {
@@ -64,6 +99,6 @@ export class InMemoryProductInOrderRepository implements ProductInOrderRepositor
   }
 
   async delete(id: string): Promise<void> {
-    this.productsInOrder = this.productsInOrder.filter(product => product.id !== id);
+    this.productsInOrder = this.productsInOrder.filter((product) => product.id !== id);
   }
 }

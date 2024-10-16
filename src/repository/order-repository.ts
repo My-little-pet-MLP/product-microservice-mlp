@@ -15,4 +15,6 @@ export interface OrderRepository {
     listAllByStoreId(storeId:string, page: number, size: number):Promise<Order[]|null>
 
     confirmOrder(id:string,fullPriceOrderInCents:number):Promise<Order|null>
+
+    updateFullPrice(orderId: string, newFullPrice: number): Promise<void>
 }

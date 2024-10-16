@@ -49,6 +49,32 @@ export class ProductInOrderRepositoryPrisma implements ProductInOrderRepository 
             },
         })
     }
+    async getByOrderAndProductId(orderId: string, productId: string): Promise<ProductInOrders | null> {
+        return await prisma.productInOrders.findFirst({
+            where: { orderId, productId },
+        });
+    }
+
+    async updateQuantity(
+        orderId: string,
+        productId: string,
+        quantity: number
+    ): Promise<ProductInOrders | null> {
+        const existingProductInOrder = await this.getByOrderAndProductId(orderId, productId);
+    
+        if (!existingProductInOrder) return null;
+    
+        // Atualiza a quantidade corretamente
+        const newQuantity = existingProductInOrder.quantity + quantity;
+    
+        return await prisma.productInOrders.update({
+            where: { id: existingProductInOrder.id },
+            data: { quantity: newQuantity, updated_at: new Date() },
+        });
+    }
+    
+
+
 
 
 }

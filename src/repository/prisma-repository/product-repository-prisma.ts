@@ -87,7 +87,15 @@ export class ProductRepositoryPrisma implements ProductRepostory {
         })
         return product;
     }
-
+    async getByIds(ids: string[]): Promise<Product[]> {
+        return await prisma.product.findMany({
+          where: {
+            id: {
+              in: ids, // Filtra os produtos que têm IDs na lista fornecida
+            },
+          },
+        });
+      }
     async listProductsByStoreId(storeId: string, page: number, size: number): Promise<Product[]> {
         const skip = (page - 1) * size; // Calcula quantos itens devem ser ignorados
 
