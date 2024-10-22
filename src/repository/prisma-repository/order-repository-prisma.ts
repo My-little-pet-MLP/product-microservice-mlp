@@ -1,25 +1,39 @@
-import { Order, Prisma } from "@prisma/client";
+import { Order, OrderStatus, Prisma } from "@prisma/client";
 import { OrderRepository } from "../order-repository";
 import { prisma } from "../../lib/prisma";
 
 export class OrderRepositoryPrisma implements OrderRepository {
-    async listAllByStoreId(storeId: string, page: number, size: number): Promise<Order[] | null> {
-        const skip = (page - 1) * size;
-        const take = size;
-
-        const orders = await prisma.order.findMany({
-            where: {
-                storeId,
-            },
-            orderBy: {
-                updated_at: "desc",
-            },
-            skip,
-            take,
-        });
-
-        return orders;
-    }
+    async listAllByStoreId(
+        storeId: string, 
+        page: number, 
+        size: number
+      ): Promise<Order[] | null> {
+          const skip = (page - 1) * size;
+          const take = size;
+      
+          const validStatuses: OrderStatus[] = [
+              OrderStatus.processing, 
+              OrderStatus.shipped, 
+              OrderStatus.delivered
+          ];
+      
+          const orders = await prisma.order.findMany({
+              where: {
+                  storeId,
+                  status: {
+                      in: validStatuses,
+                  },
+              },
+              orderBy: {
+                  updated_at: "desc",
+              },
+              skip,
+              take,
+          });
+      
+          return orders;
+      }
+    
     async confirmOrder(id: string, fullPriceOrderInCents: number): Promise<Order | null> {
         const order = await prisma.order.update({
             where: {
