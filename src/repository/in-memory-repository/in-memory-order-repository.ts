@@ -13,6 +13,7 @@ type InMemoryOrder = {
 };
 
 export class InMemoryOrderRepository implements OrderRepository {
+
   private orders: InMemoryOrder[] = [];
 
   // Simulação de ID aleatório (pode substituir por algo mais robusto como 'uuid')
@@ -24,7 +25,57 @@ export class InMemoryOrderRepository implements OrderRepository {
   private currentDate(): Date {
     return new Date();
   }
+  async TotalSalesInMonthCount(storeId: string): Promise<number> {
+    const validStatuses: OrderStatus[] = [
+      OrderStatus.processing,
+      OrderStatus.shipped,
+      OrderStatus.delivered
+  ];
 
+  // Obter o primeiro e último dia do mês atual
+  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+  // Filtrar os pedidos que pertencem à loja e foram atualizados no mês atual
+  const ordersInMonth = this.orders.filter(
+      (order) =>
+          order.storeId === storeId &&
+          validStatuses.includes(order.status) &&
+          order.updated_at >= startOfMonth &&
+          order.updated_at <= endOfMonth
+  );
+
+ 
+  const totalSalesInMonthCount = ordersInMonth.length;
+
+  return totalSalesInMonthCount;
+  }
+ 
+  async TotalBillingMonthSome(storeId: string): Promise<number> {
+    const validStatuses: OrderStatus[] = [
+        OrderStatus.processing,
+        OrderStatus.shipped,
+        OrderStatus.delivered
+    ];
+
+    // Obter o primeiro e último dia do mês atual
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+    // Filtrar os pedidos que pertencem à loja e foram atualizados no mês atual
+    const ordersInMonth = this.orders.filter(
+        (order) =>
+            order.storeId === storeId &&
+            validStatuses.includes(order.status) &&
+            order.updated_at >= startOfMonth &&
+            order.updated_at <= endOfMonth
+    );
+
+    // Somar o valor total dos pedidos em centavos
+    const total = ordersInMonth.reduce((acc, order) => acc + order.fullPriceOrderInCents, 0);
+
+    return total;
+}
   async updateFullPrice(orderId: string, newFullPrice: number): Promise<void> {
     const orderIndex = this.orders.findIndex((order) => order.id === orderId);
     if (orderIndex === -1) throw new Error("Order not found");

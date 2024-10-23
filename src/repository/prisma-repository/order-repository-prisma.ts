@@ -3,37 +3,100 @@ import { OrderRepository } from "../order-repository";
 import { prisma } from "../../lib/prisma";
 
 export class OrderRepositoryPrisma implements OrderRepository {
+    async TotalSalesInMonthCount(storeId: string): Promise<number> {
+        const validStatuses: OrderStatus[] = [
+            OrderStatus.processing,
+            OrderStatus.shipped,
+            OrderStatus.delivered
+        ];
+
+        // Obter o primeiro e último dia do mês atual
+        const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+        const orders = await prisma.order.findMany({
+            where: {
+                storeId,
+                status: {
+                    in: validStatuses,
+                },
+                updated_at: {
+                    gte: startOfMonth,
+                    lte: endOfMonth,
+                }
+            },
+            select: {
+                fullPriceOrderInCents: true,
+            }
+        });
+
+        const totalSalesInMonthCount = orders.length;
+
+        return totalSalesInMonthCount;
+    }
+    async TotalBillingMonthSome(storeId: string): Promise<number> {
+        const validStatuses: OrderStatus[] = [
+            OrderStatus.processing,
+            OrderStatus.shipped,
+            OrderStatus.delivered
+        ];
+
+        // Obter o primeiro e último dia do mês atual
+        const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+        const orders = await prisma.order.findMany({
+            where: {
+                storeId,
+                status: {
+                    in: validStatuses,
+                },
+                updated_at: {
+                    gte: startOfMonth,
+                    lte: endOfMonth,
+                }
+            },
+            select: {
+                fullPriceOrderInCents: true,
+            }
+        });
+
+        const total = orders.reduce((acc, order) => acc + order.fullPriceOrderInCents, 0);
+
+        return total;
+    }
+
     async listAllByStoreId(
-        storeId: string, 
-        page: number, 
+        storeId: string,
+        page: number,
         size: number
-      ): Promise<Order[] | null> {
-          const skip = (page - 1) * size;
-          const take = size;
-      
-          const validStatuses: OrderStatus[] = [
-              OrderStatus.processing, 
-              OrderStatus.shipped, 
-              OrderStatus.delivered
-          ];
-      
-          const orders = await prisma.order.findMany({
-              where: {
-                  storeId,
-                  status: {
-                      in: validStatuses,
-                  },
-              },
-              orderBy: {
-                  updated_at: "desc",
-              },
-              skip,
-              take,
-          });
-      
-          return orders;
-      }
-    
+    ): Promise<Order[] | null> {
+        const skip = (page - 1) * size;
+        const take = size;
+
+        const validStatuses: OrderStatus[] = [
+            OrderStatus.processing,
+            OrderStatus.shipped,
+            OrderStatus.delivered
+        ];
+
+        const orders = await prisma.order.findMany({
+            where: {
+                storeId,
+                status: {
+                    in: validStatuses,
+                },
+            },
+            orderBy: {
+                updated_at: "desc",
+            },
+            skip,
+            take,
+        });
+
+        return orders;
+    }
+
     async confirmOrder(id: string, fullPriceOrderInCents: number): Promise<Order | null> {
         const order = await prisma.order.update({
             where: {

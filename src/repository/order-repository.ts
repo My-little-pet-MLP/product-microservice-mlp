@@ -17,4 +17,8 @@ export interface OrderRepository {
     confirmOrder(id:string,fullPriceOrderInCents:number):Promise<Order|null>
 
     updateFullPrice(orderId: string, newFullPrice: number): Promise<void>
+
+    TotalBillingMonthSome(storeId:string):Promise<number>
+
+    TotalSalesInMonthCount(storeId:string):Promise<number>
 }
