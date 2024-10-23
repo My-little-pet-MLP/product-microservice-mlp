@@ -19,7 +19,7 @@ export class ListAllOrdersByStoreIdService {
     constructor(
         private orderRepository: OrderRepository,
         private storeRepository: StoreRepository
-    ) {}
+    ) { }
 
     async execute({ storeId, page, size }: ListAllOrdersByStoreIdServiceRequest): Promise<ListAllOrdersByStoreIdServiceResponse> {
         // Verificar se a loja existe
@@ -27,7 +27,6 @@ export class ListAllOrdersByStoreIdService {
         if (!storeExists) {
             return { orders: null, totalPages: null, error: new StoreNotFoundError() };
         }
-
         // Contar o número total de pedidos da loja
         const totalOrders = await this.orderRepository.countOrdersByStoreId(storeId);
         const totalPages = Math.ceil(totalOrders / size); // Calcular o número de páginas
