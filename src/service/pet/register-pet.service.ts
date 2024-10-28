@@ -5,6 +5,7 @@ import { CustomerNotFoundError } from "../error/customer-not-found-error";
 import { ErrorFetchingCustomerError } from "../error/error-fetchig-customer-error";
 import { PetDontLiveMoreItError } from "../error/pet-dont-live-more-error";
 import { PetsBreedMustHaveCharacteresError } from "../error/pets-breed-must-have-characteres-error";
+import { NameIsMustLongError } from "../error/name-is-must-long-error";
 
 interface RegisterPetServiceRequest {
     name: string;
@@ -36,6 +37,10 @@ export class RegisterPetService {
         if (breed.length > 80) {
             return { pet: null, error: new PetsBreedMustHaveCharacteresError }
         }
+        if (name.length > 80) {
+            return { pet: null, error: new NameIsMustLongError }
+        }
+
 
         const pet = await this.petRepository.register({
             age,
