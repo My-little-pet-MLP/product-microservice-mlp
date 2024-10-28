@@ -87,10 +87,10 @@ model ProductInOrders {
 model Pet {
   id         String  @id @default(cuid())
   name       String
-  raca       String
-  idade      Int
+  breed       String
+  age      Int
   imageUrl   String
-  porte      Porte
+  size      Porte
   customerId String
   isActive   Boolean @default(true)
 }
