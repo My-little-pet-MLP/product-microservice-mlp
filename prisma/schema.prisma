@@ -63,13 +63,12 @@ model Order {
 
   fullPriceOrderInCents Int
   storeId               String
-  store                 Store       @relation(fields: [storeId], references: [id])
+  store                 Store             @relation(fields: [storeId], references: [id])
   status                OrderStatus
-  customerId      String
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt()
-  productInOrders ProductInOrders[]
-
+  customerId            String
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt()
+  productInOrders       ProductInOrders[]
 }
 
 model ProductInOrders {
@@ -83,6 +82,49 @@ model ProductInOrders {
   orderId    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
+}
+
+model Pet {
+  id         String  @id @default(cuid())
+  name       String
+  breed       String
+  age      Int
+  imageUrl   String
+  size      Porte
+  customerId String
+  isActive   Boolean @default(true)
+}
+
+model Cupom {
+  id          String @id @default(uuid())
+  porcentagem Int
+
+  createdAt  DateTime @default(now())
+  ValidateAt DateTime @default(dbgenerated("'2050-02-09T00:00:00.000Z'::timestamp"))
+  isValid    Boolean  @default(true)
+  storeId String
+  
+  customerId String
+}
+
+model Missao {
+  id        String   @id @default(uuid())
+  descricao String
+  concluido Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  customerId String
+
+  timer    Float?
+  imageUrl String?
+}
+
+enum Porte {
+  mini
+  pequeno
+  medio
+  grande
+  gigante
 }
 
 enum OrderStatus {

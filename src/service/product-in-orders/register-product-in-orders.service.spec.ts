@@ -116,7 +116,6 @@ describe("RegisterProductInOrdersService", () => {
         status: "pending",
         storeId: "store123",
     });
-    console.log(order)
     await productInOrderRepository.register({
         orderId: order.id,
         productId: product.id,

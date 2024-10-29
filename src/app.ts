@@ -9,6 +9,7 @@ import { ProductInOrdersRouter } from "./http/router/product-in-orders-router";
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { config } from "./env";
+import { PetsRouter } from "./http/router/pets-router";
 
 export const app = fastify({ logger: true });
 
@@ -58,4 +59,4 @@ app.register(StoreRouter, { prefix: "/store" });
 app.register(ProductRouter, { prefix: "/product" });
 app.register(CategoryRouter, { prefix: "/category" });
 app.register(OrderRouter, { prefix: "/orders" });
-
+app.register(PetsRouter,{prefix:"/pets"});
