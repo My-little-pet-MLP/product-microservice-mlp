@@ -12,6 +12,4 @@ export interface MissionsRepository {
     listAllByCustomerIdUncomplete(customerId: string): Promise<Missao[]>
 
     listAllByCustomerId(customerId: string): Promise<Missao[]>
-
-
 }
