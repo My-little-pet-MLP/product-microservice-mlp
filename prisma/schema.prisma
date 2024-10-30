@@ -124,6 +124,8 @@ model MissionSchema {
   id        String @id @default(cuid())
   descricao String
   
+  imageUrl String?
+  timer Int?
   isMissionByTimer Boolean @default(false)
   isMissionByImage Boolean @default(false)
 }

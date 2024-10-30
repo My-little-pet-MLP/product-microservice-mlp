@@ -14,6 +14,15 @@ type InMemoryMission = {
 };
 
 export class InMemoryMissionsRepository implements MissionsRepository {
+    async checkinCustomerIdHaveMissionInDate(customerId: string): Promise<boolean> {
+        const missions =  this.missions.filter(
+            (mission) => mission.customerId === customerId
+        );
+        if(missions.length > 0){
+            return true;
+        }
+        return false;
+    }
     async findById(id: string): Promise<Missao | null> {
         const mission = this.missions.find((mission) => mission.id === id);
         return mission || null;
