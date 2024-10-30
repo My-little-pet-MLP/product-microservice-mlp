@@ -3,6 +3,7 @@ import { Order, OrderStatus, Prisma } from "@prisma/client";
 
 // Definindo um tipo para representar o pedido in-memory (similar ao Prisma.Order)
 type InMemoryOrder = {
+  cupomId: string|null;
   id: string;
   fullPriceOrderInCents: number;
   storeId: string;
@@ -105,15 +106,21 @@ export class InMemoryOrderRepository implements OrderRepository {
     return this.orders[orderIndex];
   }
 
-  async verifyCustomerHavePedingOrder(customerId: string, storeId: string): Promise<InMemoryOrder | null> {
+  async verifyCustomerHavePedingOrder(
+    customerId: string,
+    storeId: string
+  ): Promise<Order | null> {
     const order = this.orders.find(
       (order) =>
         order.customerId === customerId &&
         order.storeId === storeId &&
         order.status === "pending"
     );
-    return order || null;
+
+    // Retorna null se não encontrar ou o pedido completo com cupomId
+    return order ? { ...order, cupomId: order.cupomId ?? null } : null;
   }
+
 
   async countOrdersByCustomerId(customerId: string): Promise<number> {
     return this.orders.filter((order) => order.customerId === customerId).length;
@@ -123,16 +130,30 @@ export class InMemoryOrderRepository implements OrderRepository {
     return this.orders.filter((order) => order.storeId === storeId).length;
   }
 
-  async listAllByCustomerId(customerId: string, page: number, size: number): Promise<InMemoryOrder[] | null> {
+  async listAllByCustomerId(
+    customerId: string,
+    page: number,
+    size: number
+  ): Promise<Order[] | null> {
     const skip = (page - 1) * size;
     const take = size;
 
-    const filteredOrders = this.orders.filter((order) => order.customerId === customerId);
+    // Filtra pedidos por customerId
+    const filteredOrders = this.orders.filter(
+      (order) => order.customerId === customerId
+    );
+
+    // Paginação dos pedidos
     const paginatedOrders = filteredOrders.slice(skip, skip + take);
 
-    return paginatedOrders.length > 0 ? paginatedOrders : null;
-  }
+    // Garante que todos os pedidos retornem com `cupomId` corretamente
+    const formattedOrders = paginatedOrders.map((order) => ({
+      ...order,
+      cupomId: order.cupomId ?? null, // Garantindo `null` se não houver cupom
+    }));
 
+    return formattedOrders.length > 0 ? formattedOrders : null;
+  }
   async getById(id: string): Promise<InMemoryOrder | null> {
     const order = this.orders.find((order) => order.id === id);
     return order || null;
@@ -147,6 +168,7 @@ export class InMemoryOrderRepository implements OrderRepository {
       customerId: data.customerId,
       created_at: this.currentDate(),
       updated_at: this.currentDate(),
+      cupomId:null,
     };
 
     this.orders.push(newOrder);

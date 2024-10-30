@@ -13,5 +13,7 @@ export interface MissionsRepository {
 
     listAllByCustomerId(customerId: string): Promise<Missao[]>
 
+    checkinCustomerIdHaveMissionInDate(customerId: string): Promise<boolean>
 
+   
 }

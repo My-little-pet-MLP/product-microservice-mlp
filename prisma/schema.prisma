@@ -69,6 +69,7 @@ model Order {
   created_at            DateTime          @default(now())
   updated_at            DateTime          @updatedAt()
   productInOrders       ProductInOrders[]
+  cupomId               String?
 }
 
 model ProductInOrders {
@@ -87,10 +88,10 @@ model ProductInOrders {
 model Pet {
   id         String  @id @default(cuid())
   name       String
-  breed       String
-  age      Int
+  breed      String
+  age        Int
   imageUrl   String
-  size      Porte
+  size       Porte
   customerId String
   isActive   Boolean @default(true)
 }
@@ -102,8 +103,8 @@ model Cupom {
   createdAt  DateTime @default(now())
   ValidateAt DateTime @default(dbgenerated("'2050-02-09T00:00:00.000Z'::timestamp"))
   isValid    Boolean  @default(true)
-  storeId String
-  
+  storeId    String
+
   customerId String
 }
 
@@ -117,6 +118,16 @@ model Missao {
 
   timer    Float?
   imageUrl String?
+}
+
+model MissionSchema {
+  id        String @id @default(cuid())
+  descricao String
+  
+  imageUrl String?
+  timer Int?
+  isMissionByTimer Boolean @default(false)
+  isMissionByImage Boolean @default(false)
 }
 
 enum Porte {

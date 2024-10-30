@@ -36,6 +36,7 @@ export async function OrderRouter(app: FastifyInstance) {
                         storeId: { type: 'string', description: 'ID da loja' },
                         status: { type: 'string', description: 'Status do pedido' },
                         customerId: { type: 'string', description: 'ID do cliente' },
+                        cupomId: { type: ['string', 'null'], description: 'ID do cupom ou null' },
                         created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                         updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
                     },
@@ -45,6 +46,7 @@ export async function OrderRouter(app: FastifyInstance) {
                         storeId: '67890',
                         status: 'PENDING',
                         customerId: 'cust_98765',
+                        cupomId: 'CUP123',
                         created_at: '2024-10-06T10:00:00Z',
                         updated_at: '2024-10-06T12:00:00Z'
                     }
@@ -96,10 +98,11 @@ export async function OrderRouter(app: FastifyInstance) {
                                 type: 'object',
                                 properties: {
                                     id: { type: 'string', description: 'ID do pedido' },
-                                    fullPriceOrderInCents: { type: 'integer', description: 'Preço total do pedido em centavos' }, // Corrigido para integer
+                                    fullPriceOrderInCents: { type: 'integer', description: 'Preço total do pedido em centavos' },
                                     storeId: { type: 'string', description: 'ID da loja' },
                                     status: { type: 'string', description: 'Status do pedido' },
                                     customerId: { type: 'string', description: 'ID do cliente' },
+                                    cupomId: { type: ['string', 'null'], description: 'ID do cupom ou null' },
                                     created_at: { type: 'string', format: 'date-time', description: 'Data de criação do pedido' },
                                     updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do pedido' }
                                 }
@@ -116,6 +119,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 storeId: '67890',
                                 status: 'PENDING',
                                 customerId: 'cust_98765',
+                                cupomId: 'CUP123',
                                 created_at: '2024-10-06T10:00:00Z',
                                 updated_at: '2024-10-06T12:00:00Z'
                             },
@@ -125,6 +129,7 @@ export async function OrderRouter(app: FastifyInstance) {
                                 storeId: '54321',
                                 status: 'COMPLETED',
                                 customerId: 'cust_98765',
+                                cupomId: null,
                                 created_at: '2024-10-07T10:00:00Z',
                                 updated_at: '2024-10-07T12:00:00Z'
                             }
@@ -574,54 +579,54 @@ export async function OrderRouter(app: FastifyInstance) {
     }, TotalBillingMonthSomeController);
     app.get("/some-total-sales-in-month/:store_id", {
         schema: {
-          description: "Obtém o total de vendas no mês para uma loja específica.",
-          tags: ["Pedido"],
-          summary: "Retorna o total de vendas mensais em centavos.",
-          params: {
-            type: "object",
-            properties: {
-              store_id: {
-                type: "string",
-                description: "ID da loja.",
-              },
-            },
-            required: ["store_id"],
-          },
-          response: {
-            200: {
-              description: "Sucesso - Total de vendas do mês.",
-              type: "object",
-              properties: {
-                totalSalesInMonth: {
-                  type: "number",
-                  description: "Total de vendas em centavos.",
+            description: "Obtém o total de vendas no mês para uma loja específica.",
+            tags: ["Pedido"],
+            summary: "Retorna o total de vendas mensais em centavos.",
+            params: {
+                type: "object",
+                properties: {
+                    store_id: {
+                        type: "string",
+                        description: "ID da loja.",
+                    },
                 },
-              },
-              example: {
-                totalSalesInMonth: 750000,
-              },
+                required: ["store_id"],
             },
-            404: {
-              description: "Loja não encontrada.",
-              type: "object",
-              properties: {
-                message: {
-                  type: "string",
-                  example: "Store not found",
+            response: {
+                200: {
+                    description: "Sucesso - Total de vendas do mês.",
+                    type: "object",
+                    properties: {
+                        totalSalesInMonth: {
+                            type: "number",
+                            description: "Total de vendas em centavos.",
+                        },
+                    },
+                    example: {
+                        totalSalesInMonth: 750000,
+                    },
                 },
-              },
-            },
-            500: {
-              description: "Erro interno do servidor.",
-              type: "object",
-              properties: {
-                message: {
-                  type: "string",
-                  example: "Internal Server Error",
+                404: {
+                    description: "Loja não encontrada.",
+                    type: "object",
+                    properties: {
+                        message: {
+                            type: "string",
+                            example: "Store not found",
+                        },
+                    },
                 },
-              },
+                500: {
+                    description: "Erro interno do servidor.",
+                    type: "object",
+                    properties: {
+                        message: {
+                            type: "string",
+                            example: "Internal Server Error",
+                        },
+                    },
+                },
             },
-          },
         },
-      }, SomeTotalSalesInMouthController);
+    }, SomeTotalSalesInMouthController);
 }
