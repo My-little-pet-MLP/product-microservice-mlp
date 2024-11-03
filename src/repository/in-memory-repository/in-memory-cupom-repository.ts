@@ -1,20 +1,32 @@
 import { CupomRepository } from "../cupom-repository";
-import { Prisma } from "@prisma/client";
+import { Cupom, Prisma } from "@prisma/client";
 
-// Defining the type Cupom as per your Prisma model
-export type Cupom = {
-    id: string;
-    description:string;
-    porcentagem: number;
-    createdAt: Date;
-    ValidateAt: Date;
-    isValid: boolean;
-    storeId: string;
-    customerId: string;
-};
+
 
 export class InMemoryCupomRepository implements CupomRepository {
     private cupons: Cupom[] = [];
+    async listAllWhereCustomerIdIsNull(): Promise<Cupom[]> {
+        return this.cupons.filter(cupom => cupom.customerId === null);
+    }
+
+    // Implementação para selecionar um cupom aleatório e atribuir customerId
+    async GrantCouponToCustomer(customerId: string): Promise<Cupom | null> {
+        const cuponsDisponiveis = await this.listAllWhereCustomerIdIsNull();
+
+        if (cuponsDisponiveis.length === 0) {
+            return null; // Nenhum cupom disponível
+        }
+
+        // Selecionar um cupom aleatório
+        const randomIndex = Math.floor(Math.random() * cuponsDisponiveis.length);
+        const selectedCupom = cuponsDisponiveis[randomIndex];
+
+        // Atualizar o cupom com o novo customerId
+        selectedCupom.customerId = customerId;
+
+        return selectedCupom;
+    }
+  
 
     async getById(id: string): Promise<Cupom | null> {
         const cupom = this.cupons.find(c => c.id === id) || null;

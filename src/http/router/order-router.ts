@@ -10,6 +10,7 @@ import { VerifyCustomerHavePedingOrderService } from "../../service/order/verify
 import { VerifyCustomerHaveOrderController } from "../controller/orders/verify-customer-have-order.controller";
 import { TotalBillingMonthSomeController } from "../controller/orders/total-billing-month-some.controller";
 import { SomeTotalSalesInMouthController } from "../controller/orders/some-total-sales-in-mouth.controller";
+import { ApplyCupomInOrderController } from "../controller/orders/apply-cupom-in-order.controller";
 
 
 
@@ -629,4 +630,59 @@ export async function OrderRouter(app: FastifyInstance) {
             },
         },
     }, SomeTotalSalesInMouthController);
+    app.put("/apply-cupom-in-order", {
+        schema: {
+            description: "Aplica um cupom a um pedido específico.",
+            tags: ["Pedido"],
+            summary: "Aplica cupom a um pedido",
+            body: {
+                type: "object",
+                properties: {
+                    cupom_id: { type: "string", description: "ID do cupom" },
+                    order_id: { type: "string", description: "ID do pedido" }
+                },
+                required: ["cupom_id", "order_id"]
+            },
+            response: {
+                200: {
+                    description: "Cupom aplicado com sucesso ao pedido",
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID do pedido" },
+                        fullPriceOrderInCents: { type: "number", description: "Preço total do pedido em centavos" },
+                        storeId: { type: "string", description: "ID da loja" },
+                        status: { type: "string", description: "Status do pedido" },
+                        customerId: { type: "string", description: "ID do cliente" },
+                        cupomId: { type: ["string", "null"], description: "ID do cupom ou null se não aplicado" },
+                        created_at: { type: "string", format: "date-time", description: "Data de criação do pedido" },
+                        updated_at: { type: "string", format: "date-time", description: "Data de atualização do pedido" }
+                    },
+                    example: {
+                        id: "12345",
+                        fullPriceOrderInCents: 5000,
+                        storeId: "67890",
+                        status: "PENDING",
+                        customerId: "cust_98765",
+                        cupomId: "CUP123",
+                        created_at: "2024-10-06T10:00:00Z",
+                        updated_at: "2024-10-06T12:00:00Z"
+                    }
+                },
+                404: {
+                    description: "Pedido ou cupom não encontrado",
+                    type: "object",
+                    properties: {
+                        message: { type: "string", example: "Order not found" }
+                    }
+                },
+                500: {
+                    description: "Erro interno do servidor",
+                    type: "object",
+                    properties: {
+                        message: { type: "string", example: "Internal Server Error" }
+                    }
+                }
+            }
+        }
+    }, ApplyCupomInOrderController);
 }
