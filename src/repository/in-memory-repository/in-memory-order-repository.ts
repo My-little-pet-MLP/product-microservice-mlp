@@ -3,7 +3,7 @@ import { Order, OrderStatus, Prisma } from "@prisma/client";
 
 // Definindo um tipo para representar o pedido in-memory (similar ao Prisma.Order)
 type InMemoryOrder = {
-  cupomId: string|null;
+  cupomId: string | null;
   id: string;
   fullPriceOrderInCents: number;
   storeId: string;
@@ -31,32 +31,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       OrderStatus.processing,
       OrderStatus.shipped,
       OrderStatus.delivered
-  ];
-
-  // Obter o primeiro e último dia do mês atual
-  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
-
-  // Filtrar os pedidos que pertencem à loja e foram atualizados no mês atual
-  const ordersInMonth = this.orders.filter(
-      (order) =>
-          order.storeId === storeId &&
-          validStatuses.includes(order.status) &&
-          order.updated_at >= startOfMonth &&
-          order.updated_at <= endOfMonth
-  );
-
- 
-  const totalSalesInMonthCount = ordersInMonth.length;
-
-  return totalSalesInMonthCount;
-  }
- 
-  async TotalBillingMonthSome(storeId: string): Promise<number> {
-    const validStatuses: OrderStatus[] = [
-        OrderStatus.processing,
-        OrderStatus.shipped,
-        OrderStatus.delivered
     ];
 
     // Obter o primeiro e último dia do mês atual
@@ -65,18 +39,44 @@ export class InMemoryOrderRepository implements OrderRepository {
 
     // Filtrar os pedidos que pertencem à loja e foram atualizados no mês atual
     const ordersInMonth = this.orders.filter(
-        (order) =>
-            order.storeId === storeId &&
-            validStatuses.includes(order.status) &&
-            order.updated_at >= startOfMonth &&
-            order.updated_at <= endOfMonth
+      (order) =>
+        order.storeId === storeId &&
+        validStatuses.includes(order.status) &&
+        order.updated_at >= startOfMonth &&
+        order.updated_at <= endOfMonth
+    );
+
+
+    const totalSalesInMonthCount = ordersInMonth.length;
+
+    return totalSalesInMonthCount;
+  }
+
+  async TotalBillingMonthSome(storeId: string): Promise<number> {
+    const validStatuses: OrderStatus[] = [
+      OrderStatus.processing,
+      OrderStatus.shipped,
+      OrderStatus.delivered
+    ];
+
+    // Obter o primeiro e último dia do mês atual
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
+    // Filtrar os pedidos que pertencem à loja e foram atualizados no mês atual
+    const ordersInMonth = this.orders.filter(
+      (order) =>
+        order.storeId === storeId &&
+        validStatuses.includes(order.status) &&
+        order.updated_at >= startOfMonth &&
+        order.updated_at <= endOfMonth
     );
 
     // Somar o valor total dos pedidos em centavos
     const total = ordersInMonth.reduce((acc, order) => acc + order.fullPriceOrderInCents, 0);
 
     return total;
-}
+  }
   async updateFullPrice(orderId: string, newFullPrice: number): Promise<void> {
     const orderIndex = this.orders.findIndex((order) => order.id === orderId);
     if (orderIndex === -1) throw new Error("Order not found");
@@ -168,7 +168,7 @@ export class InMemoryOrderRepository implements OrderRepository {
       customerId: data.customerId,
       created_at: this.currentDate(),
       updated_at: this.currentDate(),
-      cupomId:null,
+      cupomId: null,
     };
 
     this.orders.push(newOrder);
@@ -181,15 +181,15 @@ export class InMemoryOrderRepository implements OrderRepository {
 
     const updatedOrder = {
       ...this.orders[orderIndex],
-      id: typeof data.id === 'string' ? data.id : this.orders[orderIndex].id,
-      fullPriceOrderInCents: typeof data.fullPriceOrderInCents === 'number'
+      cupomId: typeof data.cupomId === "string" ? data.cupomId : this.orders[orderIndex].cupomId,
+      fullPriceOrderInCents: typeof data.fullPriceOrderInCents === "number"
         ? data.fullPriceOrderInCents
         : this.orders[orderIndex].fullPriceOrderInCents,
-      storeId: typeof data.storeId === 'string' ? data.storeId : this.orders[orderIndex].storeId,
-      status: typeof data.status === 'string'
+      storeId: typeof data.storeId === "string" ? data.storeId : this.orders[orderIndex].storeId,
+      status: typeof data.status === "string"
         ? (data.status as OrderStatus)
         : this.orders[orderIndex].status,
-      customerId: typeof data.customerId === 'string'
+      customerId: typeof data.customerId === "string"
         ? data.customerId
         : this.orders[orderIndex].customerId,
       updated_at: this.currentDate(),
