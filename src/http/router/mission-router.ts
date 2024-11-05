@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { GenerateMissionsInDateController } from "../controller/missions/generate-missions-in-date.controller";
+import { CompleteMissionByIdController } from "../controller/missions/complete-mission-by-id.controller";
 
 export async function MissionRouter(app: FastifyInstance) {
     app.get("/generate-missions-in-date/:customer_id", {
@@ -90,4 +91,63 @@ export async function MissionRouter(app: FastifyInstance) {
             }
         }
     }, GenerateMissionsInDateController);
+
+    app.put("/complete/:id", {
+        schema: {
+            description: "Mark a specific mission as completed by its ID.",
+            summary: "Complete a mission",
+            tags: ["Missions"],
+            params: {
+                type: "object",
+                properties: {
+                    id: { type: "string", description: "Mission ID" }
+                },
+                required: ["id"]
+            },
+            response: {
+                200: {
+                    description: "Mission marked as completed successfully",
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "Mission ID" },
+                        descricao: { type: "string", description: "Mission description" },
+                        concluido: { type: "boolean", description: "Completion status" },
+                        createdAt: { type: "string", format: "date-time", description: "Creation date" },
+                        customerId: { type: "string", description: "Customer ID" },
+                        timer: { type: ["integer", "null"], description: "Time limit for mission in seconds" },
+                        imageUrl: { type: ["string", "null"], description: "Mission image URL" }
+                    },
+                    example: {
+                        id: "mission123",
+                        descricao: "Complete a daily task",
+                        concluido: true,
+                        createdAt: "2024-10-28T10:00:00Z",
+                        customerId: "cust123",
+                        timer: 3600,
+                        imageUrl: "https://example.com/mission-image.jpg"
+                    }
+                },
+                404: {
+                    description: "Mission not found",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Mission not found"
+                    }
+                },
+                500: {
+                    description: "Internal server error",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Internal Server Error"
+                    }
+                }
+            }
+        }
+    }, CompleteMissionByIdController);
 }
