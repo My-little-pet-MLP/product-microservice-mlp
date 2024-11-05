@@ -12,7 +12,7 @@ export async function RegisterCupomController(req: FastifyRequest, res: FastifyR
         store_id: z.string().min(1, "store_id is required"),
         description: z.string().min(1, "description is required").max(144, "the description has a maximum of 144 characters"),
         percentage: z.number().int().min(1, "the percentage must be from 1 to 100").max(100, "the percentage must be from 1 to 100"),
-        validateAt: z.string().date("format invalid, correct: 2024-12-31T23:59:59Z"),
+        validateAt: z.string().datetime("format invalid, correct: 2024-12-31T23:59:59Z"),
         quantity: z.number().int().min(1, "quantity > 1")
     })
 
