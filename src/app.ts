@@ -11,6 +11,7 @@ import swaggerUi from '@fastify/swagger-ui';
 import { config } from "./env";
 import { PetsRouter } from "./http/router/pets-router";
 import { MissionRouter } from "./http/router/mission-router";
+import { CupomRouter } from "./http/router/cupom-router";
 
 export const app = fastify({ logger: true });
 
@@ -63,3 +64,4 @@ app.register(OrderRouter, { prefix: "/orders" });
 app.register(PetsRouter,{prefix:"/pets"});
 
 app.register(MissionRouter,{prefix:"/missions"})
+app.register(CupomRouter,{prefix:"/cupom"})
