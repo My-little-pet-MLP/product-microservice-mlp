@@ -246,9 +246,10 @@ export async function OrderRouter(app: FastifyInstance) {
                             "canceled",
                             "returned"
                         ]
-                    }
+                    },
+                    fullPriceOrderInCents: {type:'number',description: 'Preço total do pedido em centavos' },
                 },
-                required: ['id', 'status']
+                required: ['id', 'status' ,'fullPriceOrderInCents']
             },
             response: {
                 200: {

@@ -25,7 +25,8 @@ describe("UpdateOrderService", () => {
     // Executando o serviço para atualizar o status do pedido
     const response = await updateOrderService.execute({
       id: order.id,
-      status: $Enums.OrderStatus.shipped
+      status: $Enums.OrderStatus.shipped,
+      fullPriceOrderInCents: order.fullPriceOrderInCents
     });
 
     // Verificando se o pedido foi atualizado corretamente
@@ -38,7 +39,8 @@ describe("UpdateOrderService", () => {
     // Tentando atualizar um pedido inexistente
     const response = await updateOrderService.execute({
       id: "non-existing-order-id",
-      status: $Enums.OrderStatus.shipped
+      status: $Enums.OrderStatus.shipped,
+      fullPriceOrderInCents:0
     });
 
     // Verificando se o erro de pedido não encontrado foi retornado

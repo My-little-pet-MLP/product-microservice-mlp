@@ -16,17 +16,19 @@ export async function UpdateOrderController(req: FastifyRequest, res: FastifyRep
             "delivered",
             "canceled",
             "returned"
-        ])
+        ]),
+        fullPriceOrderInCents: z.number().int().min(0),
     });
 
-    const { id, status } = updateOrderControllerBodySchema.parse(req.body);
+    const { id, status, fullPriceOrderInCents } = updateOrderControllerBodySchema.parse(req.body);
 
     const orderRepository = new OrderRepositoryPrisma();
     const updateOrderService = new UpdateOrderService(orderRepository);
 
     const { order, error } = await updateOrderService.execute({
         id,
-        status: status as $Enums.OrderStatus // Garantindo que o status seja convertido para o enum
+        status: status as $Enums.OrderStatus, // Garantindo que o status seja convertido para o enum,
+        fullPriceOrderInCents
     });
 
     if (error) {
