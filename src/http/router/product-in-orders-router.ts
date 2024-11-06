@@ -27,7 +27,8 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                             name: { type: 'string', description: 'Nome do produto' },
                             image: { type: 'string', description: 'URL da imagem do produto' },
                             price: { type: 'number', description: 'Preço total (quantidade * preço unitário)' },
-                            quantity: { type: 'number', description: 'Quantidade do produto no pedido' }
+                            quantity: { type: 'number', description: 'Quantidade do produto no pedido' },
+                            productInOrderId: {type:'string',description: 'ID do produto no pedido'}
                         }
                     },
                     example: [
@@ -36,7 +37,8 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                             name: "Ração Premium Cães Adultos",
                             image: "https://example.com/imagem.jpg",
                             price: 259.8,
-                            quantity: 2
+                            quantity: 2,
+                            productInOrderId: "cm23lq1k300018bxxx5muq3pv"
                         }
                     ]
                 },
