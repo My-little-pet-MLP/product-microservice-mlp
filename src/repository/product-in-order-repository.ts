@@ -4,7 +4,7 @@ export interface ProductInOrderRepository {
     listAllByOrder(orderId: string): Promise<ProductInOrders[] | null>
     findById(id: string): Promise<ProductInOrders | null>
     register(data: Prisma.ProductInOrdersUncheckedCreateInput): Promise<ProductInOrders>
-    update(id: string, data: Prisma.ProductInOrdersUncheckedUpdateInput): Promise<ProductInOrders | null>
+    update(id: string, quantity:number): Promise<ProductInOrders | null>
     delete(id: string): Promise<void>
     getByOrderAndProductId(orderId: string, productId: string): Promise<ProductInOrders | null>
     updateQuantity(

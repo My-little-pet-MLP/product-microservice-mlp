@@ -190,11 +190,11 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                 type: 'object',
                 properties: {
                     id: { type: 'string', description: 'ID do produto no pedido' },
-                    customer_id: { type: 'string', description: 'ID do cliente' }, // Mudança para usar customer_id
-                    product_id: { type: 'string', description: 'ID do produto' },
+                    customer_id: { type: 'string', description: 'ID do cliente' }, // Novo campo: customer_id
+                    product_id: { type: 'string', description: 'ID do produto' }, // Novo campo: product_id
                     quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 0 }
                 },
-                required: ['id', 'customer_id', 'product_id', 'quantity'] // Mudança para usar customer_id
+                required: ['id', 'customer_id', 'product_id', 'quantity'] // Campos obrigatórios incluindo customer_id e product_id
             },
             response: {
                 200: {
@@ -250,4 +250,5 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
             }
         }
     }, UpdateProductInOrdersController);
+    
 }

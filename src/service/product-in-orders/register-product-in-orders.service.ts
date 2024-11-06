@@ -74,14 +74,7 @@ export class RegisterProductInOrdersService {
                 return { productInOrders: null, error: new QuantityIsNegativeError() };
             }
 
-            productInOrder = await this.productInOrdersRepository.update(
-                productInOrder.id,
-                {
-                    orderId: order.id,
-                    productId,
-                    quantity: newQuantity
-                }
-            );
+            productInOrder = await this.productInOrdersRepository.update( productInOrder.id, newQuantity);
         } else {
             productInOrder = await this.productInOrdersRepository.register({
                 orderId: order.id,

@@ -32,6 +32,7 @@ export class PetRepositoryPrisma implements PetRepository{
         const pets = await prisma.pet.findMany({
             where:{
                 customerId,
+                isActive:true
             }
         })
         return pets;
