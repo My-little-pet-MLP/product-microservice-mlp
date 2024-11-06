@@ -15,6 +15,7 @@ interface ProductDetail {
     image: string;
     price: number;
     quantity: number;
+    productInOrderId:string;
 }
 
 interface ListAllByOrderIdServiceResponse {
@@ -67,6 +68,7 @@ export class ListAllProductsInOrdersByOrderId {
                     image: product.imageUrl,
                     price: (product.priceInCents) * productInOrder.quantity,
                     quantity: productInOrder.quantity,
+                    productInOrderId:productInOrder.productId
                 };
             })
         );
