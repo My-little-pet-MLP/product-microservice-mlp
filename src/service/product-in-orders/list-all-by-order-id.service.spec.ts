@@ -56,13 +56,13 @@ describe("ListAllProductsInOrdersByOrderId", () => {
     });
   
     // Associando produtos à ordem usando os IDs gerados
-    await productInOrderRepository.register({
+    const productInOrder1 = await productInOrderRepository.register({
       orderId: order.id,
       productId: product1.id,
       quantity: 2
     });
   
-    await productInOrderRepository.register({
+    const productInOrder2 = await productInOrderRepository.register({
       orderId: order.id,
       productId: product2.id,
       quantity: 1
@@ -80,14 +80,16 @@ describe("ListAllProductsInOrdersByOrderId", () => {
         name: "Produto 1",
         image: "https://example.com/produto1.jpg",
         price: 1000, // 500 * 2
-        quantity: 2
+        quantity: 2,
+        productInOrderId: productInOrder1.productId, // Adicionado productInOrderId
       },
       {
         id: product2.id,
         name: "Produto 2",
         image: "https://example.com/produto2.jpg",
         price: 200,
-        quantity: 1
+        quantity: 1,
+        productInOrderId: productInOrder2.productId, // Adicionado productInOrderId
       }
     ]);
   });
