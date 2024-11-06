@@ -219,6 +219,16 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                         message: 'Quantity must be greater than or equal to 0'
                     }
                 },
+                404: {
+                    description: 'Produto no pedido não existe',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    },
+                    example: {
+                        message: 'ProductInOrders Not Found!'
+                    }
+                },
                 500: {
                     description: 'Erro interno do servidor',
                     type: 'object',

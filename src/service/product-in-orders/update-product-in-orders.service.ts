@@ -2,6 +2,7 @@ import { ProductInOrders } from "@prisma/client";
 import { ProductInOrderRepository } from "../../repository/product-in-order-repository";
 import { QuantityIsNegativeError } from "../error/quantity-is-negative-error";
 import { OrderRepository } from "../../repository/order-repository";
+import { ProductInOrdersNotFoundError } from "../error/product-in-orders-not-found-error";
 
 interface UpdateProductInOrdersServiceRequest {
     id: string;
@@ -20,7 +21,10 @@ export class UpdateProductInOrdersService {
     ) {}
 
     async execute({ id, quantity }: UpdateProductInOrdersServiceRequest): Promise<UpdateProductInOrdersServiceResponse> {
-      
+         const ProdutInOrderExists = await this.productInOrdersRepository.findById(id);
+         if(!ProdutInOrderExists){
+            return{productInOrders:null,error:new ProductInOrdersNotFoundError}
+         }
         // Verifica se a quantidade é válida
         if (quantity < 0) {
             return { productInOrders: null, error: new QuantityIsNegativeError() };
