@@ -15,7 +15,7 @@ interface ProductDetail {
     image: string;
     price: number;
     quantity: number;
-    productInOrderId:string;
+    productInOrderId: string;
 }
 
 interface ListAllByOrderIdServiceResponse {
@@ -66,9 +66,9 @@ export class ListAllProductsInOrdersByOrderId {
                     id: product.id,
                     name: product.title,
                     image: product.imageUrl,
-                    price: (product.priceInCents) * productInOrder.quantity,
+                    price: product.priceInCents * productInOrder.quantity,
                     quantity: productInOrder.quantity,
-                    productInOrderId:productInOrder.productId
+                    productInOrderId: productInOrder.id // Corrigido para usar o ID de ProductInOrder
                 };
             })
         );
