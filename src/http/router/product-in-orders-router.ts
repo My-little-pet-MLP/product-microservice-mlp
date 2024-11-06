@@ -184,17 +184,15 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
 
     app.put("/", {
         schema: {
-            description: 'Atualizar um produto em um pedido específico para um cliente',
+            description: 'Atualizar a quantidade de um produto em um pedido específico',
             tags: ['Produtos em Pedido'],
             body: {
                 type: 'object',
                 properties: {
                     id: { type: 'string', description: 'ID do produto no pedido' },
-                    customer_id: { type: 'string', description: 'ID do cliente' }, // Novo campo: customer_id
-                    product_id: { type: 'string', description: 'ID do produto' }, // Novo campo: product_id
                     quantity: { type: 'integer', description: 'Quantidade do produto no pedido', minimum: 0 }
                 },
-                required: ['id', 'customer_id', 'product_id', 'quantity'] // Campos obrigatórios incluindo customer_id e product_id
+                required: ['id', 'quantity']
             },
             response: {
                 200: {
@@ -202,29 +200,13 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
                     type: 'object',
                     properties: {
                         id: { type: 'string', description: 'ID do produto no pedido' },
-                        productId: { type: 'string', description: 'ID do produto' },
-                        quantity: { type: 'number', description: 'Quantidade do produto no pedido' },
-                        orderId: { type: 'string', description: 'ID do pedido' },
-                        created_at: { type: 'string', format: 'date-time', description: 'Data de criação do item no pedido' },
+                        quantity: { type: 'integer', description: 'Quantidade atualizada do produto no pedido' },
                         updated_at: { type: 'string', format: 'date-time', description: 'Data de atualização do item no pedido' }
                     },
                     example: {
-                        id: '1',
-                        productId: '12345',
+                        id: 'prod123',
                         quantity: 10,
-                        orderId: '67890',
-                        created_at: '2024-10-06T10:00:00Z',
                         updated_at: '2024-10-06T12:00:00Z'
-                    }
-                },
-                404: {
-                    description: 'Pedido, produto ou cliente não encontrado',
-                    type: 'object',
-                    properties: {
-                        message: { type: 'string' }
-                    },
-                    example: {
-                        message: 'Order, product, or customer not found'
                     }
                 },
                 400: {
@@ -250,5 +232,6 @@ export async function ProductInOrdersRouter(app: FastifyInstance) {
             }
         }
     }, UpdateProductInOrdersController);
+    
     
 }
