@@ -30,14 +30,13 @@ export class ProductInOrderRepositoryPrisma implements ProductInOrderRepository 
         })
         return productInOrders;
     }
-    async update(id: string, data: Prisma.ProductInOrdersUncheckedUpdateInput): Promise<ProductInOrders | null> {
+    async update(id: string, quantity:number): Promise<ProductInOrders | null> {
         const productInOrders = await prisma.productInOrders.update({
             where: {
                 id,
             },
             data: {
-                productId: data.productId,
-                quantity: data.quantity,
+                quantity: quantity,
             }
         })
         return productInOrders;

@@ -82,15 +82,14 @@ export class InMemoryProductInOrderRepository implements ProductInOrderRepositor
 
   async update(
     id: string,
-    data: { productId?: string; quantity?: number }
+     quantity?: number 
   ): Promise<InMemoryProductInOrders | null> {
     const productIndex = this.productsInOrder.findIndex((product) => product.id === id);
     if (productIndex === -1) return null;
 
     const updatedProduct = {
       ...this.productsInOrder[productIndex],
-      productId: data.productId ?? this.productsInOrder[productIndex].productId,
-      quantity: data.quantity ?? this.productsInOrder[productIndex].quantity,
+      quantity:quantity ?? this.productsInOrder[productIndex].quantity,
       updated_at: this.currentDate(),
     };
 
