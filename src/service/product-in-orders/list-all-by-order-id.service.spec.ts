@@ -81,7 +81,7 @@ describe("ListAllProductsInOrdersByOrderId", () => {
         image: "https://example.com/produto1.jpg",
         price: 1000, // 500 * 2
         quantity: 2,
-        productInOrderId: productInOrder1.productId, // Adicionado productInOrderId
+        productInOrderId: productInOrder1.id, // Usando productInOrder1.id
       },
       {
         id: product2.id,
@@ -89,7 +89,7 @@ describe("ListAllProductsInOrdersByOrderId", () => {
         image: "https://example.com/produto2.jpg",
         price: 200,
         quantity: 1,
-        productInOrderId: productInOrder2.productId, // Adicionado productInOrderId
+        productInOrderId: productInOrder2.id, // Usando productInOrder2.id
       }
     ]);
   });
