@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { GetByIdPetController } from "../controller/pets/get-by-id.controller";
 import { ListAllByCustomerIdController } from "../controller/pets/list-all-by-customer-id.controller";
 import { RegisterPetController } from "../controller/pets/register-pet.controller";
+import { DeletePetByIdController } from "../controller/pets/delete-pet-by-id.controller";
 
 
 export async function PetsRouter(app: FastifyInstance) {
@@ -243,4 +244,46 @@ export async function PetsRouter(app: FastifyInstance) {
             }
         }
     }, RegisterPetController);
+
+    app.delete("/:id", {
+        schema: {
+            description: "Excluir um pet específico pelo ID",
+            summary: "Deleta um pet",
+            tags: ["Pets"],
+            params: {
+                type: "object",
+                properties: {
+                    id: { type: "string", description: "ID do pet a ser excluído" }
+                },
+                required: ["id"]
+            },
+            response: {
+                204: {
+                    description: "Pet excluído com sucesso",
+                    type: "null"
+                },
+                404: {
+                    description: "Pet não encontrado",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Pet not found"
+                    }
+                },
+                500: {
+                    description: "Erro interno do servidor",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Internal Server Error"
+                    }
+                }
+            }
+        }
+    }, DeletePetByIdController);
+
 }

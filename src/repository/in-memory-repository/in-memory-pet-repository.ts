@@ -31,7 +31,7 @@ export class InMemoryPetRepository implements PetRepository {
   }
 
   async listAllByUserId(customerId: string): Promise<Pet[]> {
-    return this.pets.filter(pet => pet.customerId === customerId);
+    return this.pets.filter(pet => pet.customerId === customerId && pet.isActive === true);
   }
 
   // Método para limpar o repositório entre os testes
