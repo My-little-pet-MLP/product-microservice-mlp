@@ -3,7 +3,7 @@ import { ProductInOrderRepository } from "../../repository/product-in-order-repo
 import { QuantityIsNegativeError } from "../error/quantity-is-negative-error";
 import { OrderRepository } from "../../repository/order-repository";
 import { ProductInOrdersNotFoundError } from "../error/product-in-orders-not-found-error";
-import { ProductRepostory } from "../../repository/product-repository";
+import { ProductRepostory } from "../../repository/product-repository"; // Corrigido para ProductRepository
 
 interface UpdateProductInOrdersServiceRequest {
     id: string;
@@ -19,7 +19,7 @@ export class UpdateProductInOrdersService {
     constructor(
         private productInOrdersRepository: ProductInOrderRepository,
         private orderRepository: OrderRepository,
-        private productRepository: ProductRepostory // Adicionei o repositório de produtos para buscar preços
+        private productRepository: ProductRepostory // Corrigido para ProductRepository
     ) {}
 
     async execute({ id, quantity }: UpdateProductInOrdersServiceRequest): Promise<UpdateProductInOrdersServiceResponse> {

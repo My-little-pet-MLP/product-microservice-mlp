@@ -5,6 +5,7 @@ import { ProductInOrderRepositoryPrisma } from "../../../repository/prisma-repos
 import { OrderRepositoryPrisma } from "../../../repository/prisma-repository/order-repository-prisma";
 import { QuantityIsNegativeError } from "../../../service/error/quantity-is-negative-error";
 import { ProductInOrdersNotFoundError } from "../../../service/error/product-in-orders-not-found-error";
+import { ProductRepositoryPrisma } from "../../../repository/prisma-repository/product-repository-prisma";
 
 export async function UpdateProductInOrdersController(req: FastifyRequest, res: FastifyReply) {
     // Validação do corpo da requisição usando Zod
@@ -19,11 +20,12 @@ export async function UpdateProductInOrdersController(req: FastifyRequest, res: 
     // Instancia os repositórios necessários
     const productInOrdersRepository = new ProductInOrderRepositoryPrisma();
     const orderRepository = new OrderRepositoryPrisma();
-
+    const productRepository = new ProductRepositoryPrisma()
     // Instancia o serviço
     const updateProductInOrdersService = new UpdateProductInOrdersService(
         productInOrdersRepository,
         orderRepository,
+        productRepository
     );
 
     // Executa o serviço de atualização de produtos no pedido
