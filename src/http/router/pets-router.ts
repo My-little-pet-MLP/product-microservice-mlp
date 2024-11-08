@@ -330,16 +330,18 @@ export async function PetsRouter(app: FastifyInstance) {
                         customerId: { type: "string", description: "ID do cliente dono do pet" },
                         isActive: { type: "boolean", description: "Status ativo do pet" }
                     },
-                    example: {
-                        id: "pet123",
-                        name: "Rex",
-                        breed: "Golden Retriever",
-                        age: 3,
-                        imageUrl: "https://example.com/rex.jpg",
-                        size: "grande",
-                        customerId: "cust123",
-                        isActive: true
-                    }
+                    examples: [
+                        {
+                            id: "pet123",
+                            name: "Rex",
+                            breed: "Golden Retriever",
+                            age: 3,
+                            imageUrl: "https://example.com/rex.jpg",
+                            size: "grande",
+                            customerId: "cust123",
+                            isActive: true
+                        }
+                    ]
                 },
                 400: {
                     description: "Erro de validação ou execução do serviço",
@@ -347,11 +349,11 @@ export async function PetsRouter(app: FastifyInstance) {
                     properties: {
                         message: { type: "string" }
                     },
-                    examples: {
-                        idadeInvalida: { message: "A idade mínima é 0 anos" },
-                        racaMuitoLonga: { message: "A raça deve ter menos de 80 caracteres" },
-                        nomeMuitoLongo: { message: "O nome deve ter menos de 80 caracteres" }
-                    }
+                    examples: [
+                        { message: "A idade mínima é 0 anos" },
+                        { message: "A raça deve ter menos de 80 caracteres" },
+                        { message: "O nome deve ter menos de 80 caracteres" }
+                    ]
                 },
                 404: {
                     description: "Pet não encontrado",
@@ -359,9 +361,9 @@ export async function PetsRouter(app: FastifyInstance) {
                     properties: {
                         message: { type: "string" }
                     },
-                    example: {
-                        message: "Pet não encontrado"
-                    }
+                    examples: [
+                        { message: "Pet não encontrado" }
+                    ]
                 },
                 500: {
                     description: "Erro interno do servidor",
@@ -369,9 +371,9 @@ export async function PetsRouter(app: FastifyInstance) {
                     properties: {
                         message: { type: "string" }
                     },
-                    example: {
-                        message: "Erro Interno do Servidor"
-                    }
+                    examples: [
+                        { message: "Erro Interno do Servidor" }
+                    ]
                 }
             }
         }
