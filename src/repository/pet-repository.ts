@@ -6,4 +6,5 @@ export interface PetRepository {
 
     delete(id: string): Promise<void>
     listAllByUserId(customerId: string): Promise<Pet[]>
+    update(id: string, data: Prisma.PetUncheckedUpdateInput): Promise<Pet | null>
 }

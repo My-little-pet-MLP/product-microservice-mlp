@@ -3,6 +3,15 @@ import { PetRepository } from "../pet-repository";
 import { prisma } from "../../lib/prisma";
 
 export class PetRepositoryPrisma implements PetRepository{
+    async update(id: string, data: Prisma.PetUncheckedUpdateInput): Promise<Pet | null> {
+       const pet = await prisma.pet.update({
+        where:{
+            id,
+        },
+        data,
+       })
+       return pet;
+    }
     async findById(id: string): Promise<Pet | null> {
        const pet = await prisma.pet.findFirst({
         where:{
