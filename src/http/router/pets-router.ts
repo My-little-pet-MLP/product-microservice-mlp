@@ -3,6 +3,7 @@ import { GetByIdPetController } from "../controller/pets/get-by-id.controller";
 import { ListAllByCustomerIdController } from "../controller/pets/list-all-by-customer-id.controller";
 import { RegisterPetController } from "../controller/pets/register-pet.controller";
 import { DeletePetByIdController } from "../controller/pets/delete-pet-by-id.controller";
+import { UpdatePetByIdController } from "../controller/pets/update-pet-by-id.controller";
 
 
 export async function PetsRouter(app: FastifyInstance) {
@@ -285,5 +286,94 @@ export async function PetsRouter(app: FastifyInstance) {
             }
         }
     }, DeletePetByIdController);
-
+    app.put("/", {
+        schema: {
+            description: "Atualizar informações de um pet existente",
+            summary: "Atualização dos detalhes de um pet",
+            tags: ["Pets"],
+            body: {
+                type: "object",
+                properties: {
+                    id: { type: "string", description: "ID do pet a ser atualizado", minLength: 1 },
+                    name: { type: "string", description: "Nome do pet", minLength: 1 },
+                    age: { 
+                        type: "integer", 
+                        description: "Idade do pet em anos", 
+                        minimum: 0, 
+                        maximum: 30 
+                    },
+                    breed: { type: "string", description: "Raça do pet", minLength: 1, maxLength: 80 },
+                    size: { 
+                        type: "string", 
+                        enum: ["mini", "pequeno", "medio", "grande", "gigante"], 
+                        description: "Porte do pet" 
+                    },
+                    imageUrl: { type: "string", format: "url", description: "URL da imagem do pet" }
+                },
+                required: ["id", "name", "age", "breed", "size", "imageUrl"]
+            },
+            response: {
+                200: {
+                    description: "Pet atualizado com sucesso",
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID do pet" },
+                        name: { type: "string", description: "Nome do pet" },
+                        breed: { type: "string", description: "Raça do pet" },
+                        age: { type: "integer", description: "Idade do pet" },
+                        imageUrl: { type: "string", description: "URL da imagem do pet" },
+                        size: { 
+                            type: "string", 
+                            description: "Porte do pet", 
+                            enum: ["mini", "pequeno", "medio", "grande", "gigante"] 
+                        },
+                        customerId: { type: "string", description: "ID do cliente dono do pet" },
+                        isActive: { type: "boolean", description: "Status ativo do pet" }
+                    },
+                    example: {
+                        id: "pet123",
+                        name: "Rex",
+                        breed: "Golden Retriever",
+                        age: 3,
+                        imageUrl: "https://example.com/rex.jpg",
+                        size: "grande",
+                        customerId: "cust123",
+                        isActive: true
+                    }
+                },
+                400: {
+                    description: "Erro de validação ou execução do serviço",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    examples: {
+                        idadeInvalida: { message: "A idade mínima é 0 anos" },
+                        racaMuitoLonga: { message: "A raça deve ter menos de 80 caracteres" },
+                        nomeMuitoLongo: { message: "O nome deve ter menos de 80 caracteres" }
+                    }
+                },
+                404: {
+                    description: "Pet não encontrado",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Pet não encontrado"
+                    }
+                },
+                500: {
+                    description: "Erro interno do servidor",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Erro Interno do Servidor"
+                    }
+                }
+            }
+        }
+    }, UpdatePetByIdController);
 }
