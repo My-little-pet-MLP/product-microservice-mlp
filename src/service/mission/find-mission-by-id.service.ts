@@ -1,9 +1,9 @@
 import { Missao } from "@prisma/client";
 import { MissionsRepository } from "../../repository/missions-repository";
+import { MissionNotFoundError } from "../error/mission-not-found-error";
 
 interface FindMissionByIdServiceRequest {
-    descricao: string;
-    customerId: string;
+    id: string;
 
 }
 interface FindMissionByIdServiceResponse {
@@ -12,12 +12,11 @@ interface FindMissionByIdServiceResponse {
 }
 export class FindMissionByIdService {
     constructor(private missionRepository: MissionsRepository) { }
-    async execute({ descricao, customerId }: FindMissionByIdServiceRequest): Promise<FindMissionByIdServiceResponse> {
-        const mission = await this.missionRepository.register({
-            descricao,
-            customerId,
-            concluido: false
-        })
+    async execute({ id }: FindMissionByIdServiceRequest): Promise<FindMissionByIdServiceResponse> {
+        const mission = await this.missionRepository.findById(id)
+        if (!mission) {
+            return { mission: null, error: new MissionNotFoundError }
+        }
         return { mission, error: null }
     }
 }

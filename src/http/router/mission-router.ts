@@ -1,8 +1,73 @@
 import { FastifyInstance } from "fastify";
 import { GenerateMissionsInDateController } from "../controller/missions/generate-missions-in-date.controller";
 import { CompleteMissionByIdController } from "../controller/missions/complete-mission-by-id.controller";
+import { FindMissionByidController } from "../controller/missions/find-mission-by-id.controller";
 
 export async function MissionRouter(app: FastifyInstance) {
+    app.get("/:id", {
+        schema: {
+            description: "Buscar informações detalhadas de uma missão específica pelo ID",
+            summary: "Busca de missão por ID",
+            tags: ["Missions"],
+            params: {
+                type: "object",
+                properties: {
+                    id: { type: "string", description: "ID da missão" }
+                },
+                required: ["id"]
+            },
+            response: {
+                200: {
+                    description: "Missão encontrada com sucesso",
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID da missão" },
+                        descricao: { type: "string", description: "Descrição da missão" },
+                        concluido: { type: "boolean", description: "Status de conclusão" },
+                        createdAt: { type: "string", format: "date-time", description: "Data de criação" },
+                        customerId: { type: "string", description: "ID do cliente" },
+                        timer: {
+                            type: ["integer", "null"],
+                            description: "Tempo limite para a missão em segundos"
+                        },
+                        imageUrl: {
+                            type: ["string", "null"],
+                            description: "URL da imagem da missão"
+                        }
+                    },
+                    example: {
+                        id: "mission123",
+                        descricao: "Missão de exemplo",
+                        concluido: false,
+                        createdAt: "2024-10-28T10:00:00Z",
+                        customerId: "cust123",
+                        timer: 3600,
+                        imageUrl: "https://example.com/mission-image.jpg"
+                    }
+                },
+                404: {
+                    description: "Missão não encontrada",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Missão não encontrada"
+                    }
+                },
+                500: {
+                    description: "Erro interno do servidor",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" }
+                    },
+                    example: {
+                        message: "Erro Interno do Servidor"
+                    }
+                }
+            }
+        }
+    }, FindMissionByidController);
     app.get("/generate-missions-in-date/:customer_id", {
         schema: {
             description: "Gerar missões para um cliente específico em uma data",
