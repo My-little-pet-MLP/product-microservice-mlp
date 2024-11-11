@@ -152,7 +152,7 @@ export async function CupomRouter(app: FastifyInstance) {
             }
         }
     }, RegisterCupomController);
-    app.get("/list-all-by-customer/:customer_id", {
+    app.get("/list-all-by-customer/", {
         schema: {
             description: "List all coupons for a specific customer and store.",
             tags: ["Cupom"],
@@ -160,16 +160,10 @@ export async function CupomRouter(app: FastifyInstance) {
             querystring: {
                 type: "object",
                 properties: {
-                    store_id: { type: "string", description: "Store ID" }
-                },
-                required: ["store_id"]
-            },
-            params: {
-                type: "object",
-                properties: {
+                    store_id: { type: "string", description: "Store ID" },
                     customer_id: { type: "string", description: "Customer ID" }
                 },
-                required: ["customer_id"]
+                required: ["store_id", "customer_id"]
             },
             response: {
                 200: {

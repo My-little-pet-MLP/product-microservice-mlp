@@ -25,8 +25,12 @@ export class ApplyCupomInOrderService {
         if (!CupomExists) {
             return { order: null, error: new CupomNotFoundError }
         }
+        // Calculando o novo preço com o desconto aplicado
+        const discountAmount = (OrderExists.fullPriceOrderInCents * CupomExists.porcentagem) / 100;
+        const fullPriceOrderInCents = OrderExists.fullPriceOrderInCents - discountAmount;
         const orderUpdated = await this.orderRepository.update(orderId, {
             cupomId,
+            fullPriceOrderInCents,
         })
         return { order: orderUpdated, error: null }
     }
