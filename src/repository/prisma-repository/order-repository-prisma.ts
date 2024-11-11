@@ -146,6 +146,9 @@ export class OrderRepositoryPrisma implements OrderRepository {
         const orders = await prisma.order.findMany({
             where: {
                 customerId,
+                status: {
+                    in: ["pending", "awaiting_payment", "processing", "shipped"], // Status que indicam que o pedido não foi finalizado
+                },
             },
             orderBy: {
                 updated_at: "desc",
