@@ -45,6 +45,7 @@ export class ConfirmOrderService {
             // Somar o preço total para o pedido
             fullPriceOrderInCents += product.priceInCents * productInOrder.quantity;
         }
+        
         const order = await this.orderRepository.confirmOrder(id, fullPriceOrderInCents)
         // Retornar a ordem com erro nulo após o processamento bem-sucedido
         return { order, error: null };

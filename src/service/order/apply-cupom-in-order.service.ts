@@ -32,6 +32,9 @@ export class ApplyCupomInOrderService {
             cupomId,
             fullPriceOrderInCents,
         })
+        const CupomUpdated = await this.cupomRepository.update(cupomId, {
+            isValid: false
+        })
         return { order: orderUpdated, error: null }
     }
 }
