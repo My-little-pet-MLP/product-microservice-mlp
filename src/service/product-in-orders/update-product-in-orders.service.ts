@@ -20,7 +20,7 @@ export class UpdateProductInOrdersService {
         private productInOrdersRepository: ProductInOrderRepository,
         private orderRepository: OrderRepository,
         private productRepository: ProductRepostory
-    ) {}
+    ) { }
 
     async execute({ id, quantity }: UpdateProductInOrdersServiceRequest): Promise<UpdateProductInOrdersServiceResponse> {
         // Verifica se o produto no pedido existe
@@ -37,12 +37,22 @@ export class UpdateProductInOrdersService {
         // Se a quantidade for 0, exclui o produto do pedido
         if (quantity === 0) {
             await this.productInOrdersRepository.delete(id);
-            
-            // Após deletar o item, recalcula o preço total da ordem sem ele
-            const allProductsInOrders = await this.productInOrdersRepository.listAllByOrder(productInOrderExists.orderId) || [];
-            let fullPriceOrderInCents = 0;
 
-            for (const item of allProductsInOrders) {
+            // Verifica se ainda há produtos no pedido após a exclusão
+            const remainingProductsInOrder = await this.productInOrdersRepository.listAllByOrder(productInOrderExists.orderId) ?? [];
+
+            if (remainingProductsInOrder.length === 0) {
+                // Se não houver mais produtos, deleta o pedido
+                await this.orderRepository.delete(productInOrderExists.orderId);
+
+                // Retorna null para `productInOrders` e `error` pois ambos foram deletados
+                return { productInOrders: null, error: null };
+            }
+
+
+            // Caso contrário, recalcula o preço total da ordem sem o produto deletado
+            let fullPriceOrderInCents = 0;
+            for (const item of remainingProductsInOrder) {
                 const product = await this.productRepository.getById(item.productId);
                 if (product) {
                     fullPriceOrderInCents += product.priceInCents * item.quantity;
@@ -53,11 +63,10 @@ export class UpdateProductInOrdersService {
                 fullPriceOrderInCents
             });
 
-            // Retorna null para `productInOrders` pois ele foi deletado
             return { productInOrders: null, error: null };
         }
 
-        // Atualiza apenas a quantidade do produto no pedido, não o preço do produto
+        // Atualiza apenas a quantidade do produto no pedido
         const productInOrders = await this.productInOrdersRepository.update(id, quantity);
 
         // Recalcula o preço total da ordem

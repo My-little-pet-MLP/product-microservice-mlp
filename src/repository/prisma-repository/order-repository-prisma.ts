@@ -3,6 +3,11 @@ import { OrderRepository } from "../order-repository";
 import { prisma } from "../../lib/prisma";
 
 export class OrderRepositoryPrisma implements OrderRepository {
+    async delete(id: string): Promise<void> {
+        await prisma.order.delete({
+            where: { id }
+        })
+    }
     async TotalSalesInMonthCount(storeId: string): Promise<number> {
         const validStatuses: OrderStatus[] = [
             OrderStatus.processing,
