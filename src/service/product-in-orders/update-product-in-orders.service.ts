@@ -15,7 +15,6 @@ interface UpdateProductInOrdersServiceResponse {
     error: Error | null;
 }
 
-
 export class UpdateProductInOrdersService {
     constructor(
         private productInOrdersRepository: ProductInOrderRepository,
@@ -35,25 +34,43 @@ export class UpdateProductInOrdersService {
             return { productInOrders: null, error: new QuantityIsNegativeError() };
         }
 
+        // Se a quantidade for 0, exclui o produto do pedido
+        if (quantity === 0) {
+            await this.productInOrdersRepository.delete(id);
+            
+            // Após deletar o item, recalcula o preço total da ordem sem ele
+            const allProductsInOrders = await this.productInOrdersRepository.listAllByOrder(productInOrderExists.orderId) || [];
+            let fullPriceOrderInCents = 0;
+
+            for (const item of allProductsInOrders) {
+                const product = await this.productRepository.getById(item.productId);
+                if (product) {
+                    fullPriceOrderInCents += product.priceInCents * item.quantity;
+                }
+            }
+
+            await this.orderRepository.update(productInOrderExists.orderId, {
+                fullPriceOrderInCents
+            });
+
+            // Retorna null para `productInOrders` pois ele foi deletado
+            return { productInOrders: null, error: null };
+        }
+
         // Atualiza apenas a quantidade do produto no pedido, não o preço do produto
         const productInOrders = await this.productInOrdersRepository.update(id, quantity);
 
-        // Busca todos os produtos na ordem para calcular o preço total atualizado da ordem
+        // Recalcula o preço total da ordem
         const allProductsInOrders = await this.productInOrdersRepository.listAllByOrder(productInOrderExists.orderId) || [];
-        
-        // Calcula o preço total da ordem somando (preço do produto * quantidade do item no pedido)
         let fullPriceOrderInCents = 0;
 
         for (const item of allProductsInOrders) {
-            // Obtém o produto associado, mas não modifica seu preço
             const product = await this.productRepository.getById(item.productId);
             if (product) {
-                // Usa apenas o preço para calcular o total, sem alterar o próprio produto
                 fullPriceOrderInCents += product.priceInCents * item.quantity;
             }
         }
 
-        // Atualiza apenas o preço total do pedido, sem modificar o preço do produto no repositório de produtos
         await this.orderRepository.update(productInOrderExists.orderId, {
             fullPriceOrderInCents
         });
