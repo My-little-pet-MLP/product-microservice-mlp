@@ -14,6 +14,9 @@ type InMemoryOrder = {
 };
 
 export class InMemoryOrderRepository implements OrderRepository {
+  async delete(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 
   private orders: InMemoryOrder[] = [];
 

@@ -21,4 +21,5 @@ export interface OrderRepository {
     TotalBillingMonthSome(storeId: string): Promise<number>
 
     TotalSalesInMonthCount(storeId: string): Promise<number>
+    delete(id:string):Promise<void>
 }
