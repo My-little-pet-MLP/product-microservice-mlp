@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { GrantCouponToCustomerByIdController } from "../controller/cupons/grant-coupon-to-customer-by-id.controller";
 import { RegisterCupomController } from "../controller/cupons/register-cupom.controller";
 import { ListAllCupomByCustomerIdAndStoreIdController } from "../controller/cupons/list-by-customer-id.controller";
+import { ListAllCouponByStoreIdController } from "../controller/cupons/list-all-coupon-by-store-id.controller";
 
 export async function CupomRouter(app: FastifyInstance) {
     app.put("/grant-coupon-to-customer/:customer_id", {
@@ -218,4 +219,73 @@ export async function CupomRouter(app: FastifyInstance) {
             }
         }
     }, ListAllCupomByCustomerIdAndStoreIdController);
+
+    app.get("/list-all-by-store-id/:store_id", {
+        schema: {
+            description: "Retrieve all coupons for a specific store by store ID.",
+            tags: ["Cupom"],
+            summary: "List all coupons by store ID",
+            params: {
+                type: "object",
+                properties: {
+                    store_id: { type: "string", description: "Store ID" },
+                },
+                required: ["store_id"],
+            },
+            response: {
+                200: {
+                    description: "Coupons successfully retrieved for the store",
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            cupons: {
+                                type: "object",
+                                properties: {
+                                    description: { type: "string", description: "Coupon description" },
+                                    porcentagem: { type: "number", description: "Discount percentage" },
+                                    storeId: { type: "string", description: "Store ID" },
+                                },
+                            },
+                            available: { type: "number", description: "Number of available coupons" },
+                            delivered: { type: "number", description: "Number of delivered coupons" },
+                            totalQuantity: { type: "number", description: "Total number of coupons" },
+                        },
+                    },
+                    example: [
+                        {
+                            cupons: {
+                                description: "10% OFF",
+                                porcentagem: 10,
+                                storeId: "STORE123",
+                            },
+                            available: 5,
+                            delivered: 15,
+                            totalQuantity: 20,
+                        },
+                    ],
+                },
+                404: {
+                    description: "Store not found",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" },
+                    },
+                    example: {
+                        message: "Store not found",
+                    },
+                },
+                500: {
+                    description: "Internal server error",
+                    type: "object",
+                    properties: {
+                        message: { type: "string" },
+                    },
+                    example: {
+                        message: "Internal Server Error",
+                    },
+                },
+            },
+        },
+    }, ListAllCouponByStoreIdController);
 }

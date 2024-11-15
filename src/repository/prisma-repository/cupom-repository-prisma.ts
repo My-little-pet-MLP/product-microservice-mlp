@@ -3,6 +3,70 @@ import { CupomRepository } from "../cupom-repository";
 import { prisma } from "../../lib/prisma";
 
 export class CupomRepositoryPrisma implements CupomRepository {
+    async countCouponWhereDescription(description: string): Promise<number> {
+        const numbercupomExists = await prisma.cupom.findMany({
+            where: {
+                description,
+            },
+
+        });
+        return numbercupomExists.length;
+    }
+    async listAllCouponByStore(storeId: string): Promise<Cupom[]> {
+        const uniqueCupons = await prisma.cupom.findMany({
+            where: {
+                storeId: storeId
+            },
+            distinct: ['description'] // Garante que as descrições sejam únicas
+        });
+        return uniqueCupons;
+    }
+
+    async countCouponWhereCustomerIdNotNullAndStoreId(storeId: string, description: string): Promise<number> {
+        const cupons = await prisma.cupom.findMany({
+            where: {
+                customerId: {
+                    not: null,
+                },
+                description: description
+            },
+        });
+        console.log(cupons);
+
+        const cuponsFinal = await prisma.cupom.findMany({
+            where: {
+                customerId: {
+                    not: null,
+                },
+                description: description,
+                storeId,
+            },
+        });
+        console.log(cuponsFinal.length);
+
+
+        return cuponsFinal.length
+    }
+    async countCouponWhereCustomerIdIsNullAndStoreId(storeId: string, description: string): Promise<number> {
+        const cupons = await prisma.cupom.findMany({
+            where: {
+                customerId: null,
+                description: description,
+                storeId
+            }
+        })
+        return cupons.length;
+    }
+    async listAllWhereCustomerIdIsNullByStoreId(storeId: string): Promise<Cupom[]> {
+        const cupons = await prisma.cupom.findMany({
+            where: {
+                customerId: null,
+                storeId
+            }
+        })
+        return cupons;
+    }
+
     async listAllWhereCustomerIdIsNull(): Promise<Cupom[]> {
         const cupons = await prisma.cupom.findMany({
             where: {
