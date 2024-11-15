@@ -10,6 +10,18 @@ export interface CupomRepository {
     listByStoreId(storeId: string): Promise<Cupom[]>
 
     listByStoreIdAndCustomerId(customerId: string, storeId: string): Promise<Cupom[]>
+
+    listAllWhereCustomerIdIsNullByStoreId(storeId:string): Promise<Cupom[]>
+
     listAllWhereCustomerIdIsNull(): Promise<Cupom[]>
+
+    
+
+    listAllCouponByStore(storeId:string):Promise<Cupom[]>
+
+    countCouponWhereCustomerIdIsNullAndStoreId(storeId:string,description:string):Promise<number>
+    countCouponWhereCustomerIdNotNullAndStoreId(storeId:string,description:string):Promise<number>
+
+    countCouponWhereDescription(description:string):Promise<number>
     GrantCouponToCustomer(customerId: string): Promise<Cupom | null>
 }
