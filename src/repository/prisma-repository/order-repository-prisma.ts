@@ -82,7 +82,8 @@ export class OrderRepositoryPrisma implements OrderRepository {
         const validStatuses: OrderStatus[] = [
             OrderStatus.processing,
             OrderStatus.shipped,
-            OrderStatus.delivered
+            OrderStatus.delivered,
+            OrderStatus.payment_confirmed
         ];
 
         const orders = await prisma.order.findMany({
